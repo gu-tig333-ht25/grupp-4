@@ -40,7 +40,6 @@ class LoginPage extends StatelessWidget{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Username field
             TextField(
               controller: usernameController,
               decoration: const InputDecoration(
@@ -50,7 +49,6 @@ class LoginPage extends StatelessWidget{
             ),
             const SizedBox(height: 16),
 
-            // Password field
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -61,7 +59,6 @@ class LoginPage extends StatelessWidget{
             ),
             const SizedBox(height: 24),
 
-            // Login button
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -73,7 +70,6 @@ class LoginPage extends StatelessWidget{
             ),
             const SizedBox(height: 12),
 
-            // Sign up button
             OutlinedButton(
               onPressed: () {
                 Navigator.push(
