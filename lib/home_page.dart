@@ -67,7 +67,7 @@ Widget bookGenreListHorizontal(String genreTitle, int itemCount) {
             return Container(
               margin: EdgeInsets.only(left: index == 0 ? 0 : 12),
               child: Container(
-                width: 120,
+                width: 135,
                 height: 155,
                 color: Theme.of(context).secondaryHeaderColor,
               ),
