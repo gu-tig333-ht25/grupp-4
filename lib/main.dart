@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'profile_page.dart';
 import "search_page.dart";
 import 'book_info_page.dart';
 import 'package:template/home_page.dart';
