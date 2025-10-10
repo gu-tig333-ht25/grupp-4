@@ -9,13 +9,23 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Demo'),
+        title: Text('Name'),
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          bookGenreSection("Romance", 5),
+          SizedBox(height: 20),
+          bookGenreSection("Action", 7),
+          SizedBox(height: 20),
+          bookGenreSection("Sci-fi", 10),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -33,4 +43,38 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget bookGenreListHorizontal(String genreTitle, int itemCount) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // Titel
+      Container(
+        margin: EdgeInsets.only(bottom: 4),
+        child: Text(
+          genreTitle,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+      // Horisontell scrolllista
+      SizedBox(
+        height: 180, // viktigt! annars får ListView ingen höjd
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.only(left: index == 0 ? 0 : 12),
+              child: Container(
+                width: 120,
+                height: 155,
+                color: Theme.of(context).secondaryHeaderColor,
+              ),
+            );
+          },
+        ),
+      ),
+    ],
+  );
 }
