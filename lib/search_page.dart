@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatefulWidget { //Huvudskärm för search_page
   const SearchPage({super.key});
 
   @override
@@ -9,7 +9,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> { //håller koll på vilka taggar som är valda
   final Set<String> selectedTags = {};
-  bool showGenres = false;
+  bool showGenres = false; 
   bool showTropes = false;
 
     void _toggleTag(String label) {
@@ -76,13 +76,55 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
               spacing: 12,
               runSpacing: 12,
               children: [
-                _TagChip(label: 'Romance', colorScheme: colorScheme),
-                _TagChip(label: 'Fluff', colorScheme: colorScheme),
-                _TagChip(label: 'Angst', colorScheme: colorScheme),
-                _TagChip(label: 'Enemies to lovers', colorScheme: colorScheme),
-                _TagChip(label: 'Sci-fi', colorScheme: colorScheme),
-                _TagChip(label: 'Fantasy', colorScheme: colorScheme),
-                _TagChip(label: 'Friends to lovers', colorScheme: colorScheme),                  
+                _SelectableTagChip(
+                  label: 'Romance',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
+                _SelectableTagChip(
+                  label: 'Fluff',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
+                _SelectableTagChip(
+                  label: 'Angst',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
+                _SelectableTagChip(
+                  label: 'Enemies to lovers',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
+                _SelectableTagChip(
+                  label: 'Sci-fi',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
+                _SelectableTagChip(
+                  label: 'Fantasy',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
+                _SelectableTagChip(
+                  label: 'Friends to lovers',
+                  selectedTags: selectedTags,
+                  onSelected: _toggleTag,
+                  colorScheme: colorScheme,
+                  usePopularStyle: true,
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -99,7 +141,7 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
             const SizedBox(height: 8),
 
             //Genrelistan
-                        ExpansionTile(
+            ExpansionTile(
               title: const Text("Genres", style: TextStyle(fontSize: 16)),
               leading: const Icon(Icons.category),
               textColor: colorScheme.primary,
@@ -120,18 +162,21 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
+                        usePopularStyle: true,
                       ),
                       _SelectableTagChip(
                         label: 'Fantasy',
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
+                        usePopularStyle: true,
                       ),
                       _SelectableTagChip(
                         label: 'Sci-fi',
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
+                        usePopularStyle: true,
                       ),
                     ],
                   ),
@@ -161,18 +206,21 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
+                        usePopularStyle: true,
                       ),
                       _SelectableTagChip(
                         label: 'Fluff',
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
+                        usePopularStyle: true,
                       ),
                       _SelectableTagChip(
                         label: 'Enemies to lovers',
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
+                        usePopularStyle: true,
                       ),
                     ],
                   ),
@@ -182,7 +230,7 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
 
             const SizedBox(height: 24),
             
-            // Search tags-knapp
+            // Search tagsknapp
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -232,63 +280,49 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
   }
 }
 
-// --- Komponenter ---
-
-class _TagChip extends StatelessWidget { //chip = rundad ruta med text
-  final String label;
-  final ColorScheme colorScheme;
-
-  const _TagChip({
-    required this.label,
-    required this.colorScheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Chip(
-      label: Text(label),
-      backgroundColor: colorScheme.secondaryContainer.withValues(alpha: 0.2),
-      side: BorderSide(color: colorScheme.secondary), //kantfärg
-      labelStyle: TextStyle(color: colorScheme.onSecondaryContainer),
-    );
-  }
-}
+// --- Komponent ---
 
 class _SelectableTagChip extends StatelessWidget {
   final String label;
   final Set<String> selectedTags;
   final void Function(String) onSelected;
   final ColorScheme colorScheme;
+  final bool usePopularStyle;
 
   const _SelectableTagChip({
     required this.label,
     required this.selectedTags,
     required this.onSelected,
     required this.colorScheme,
+    this.usePopularStyle = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final bool isSelected = selectedTags.contains(label);
 
+    final background = usePopularStyle
+        ? colorScheme.secondaryContainer.withAlpha(50)
+        : colorScheme.surfaceContainerHighest;
+    final selectedColor = usePopularStyle
+        ? colorScheme.secondaryContainer
+        : colorScheme.secondaryContainer;
+    final borderColor = usePopularStyle
+        ? colorScheme.secondary
+        : (isSelected ? colorScheme.secondary : colorScheme.outlineVariant);
+
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
       onSelected: (_) => onSelected(label),
-      selectedColor: colorScheme.secondaryContainer,
-      backgroundColor: colorScheme.surfaceContainerHighest,
+      backgroundColor: background,
+      selectedColor: selectedColor,
       labelStyle: TextStyle(
-        color: isSelected
-            ? colorScheme.onSecondaryContainer
-            : colorScheme.onSurface,
+        color: isSelected ? colorScheme.onSecondaryContainer : colorScheme.onSecondaryContainer,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: isSelected
-              ? colorScheme.secondary
-              : colorScheme.outlineVariant,
-        ),
+        side: BorderSide(color: borderColor),
       ),
     );
   }
