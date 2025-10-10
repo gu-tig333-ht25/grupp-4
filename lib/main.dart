@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import "search_page.dart";
+import 'book_info_page.dart';
+import 'package:template/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,21 +27,7 @@ class MyApp extends StatelessWidget {
           error: Color(0xffb00020),
         ),
       ),
-      home: SearchPage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text("titel"),
-      ),
+      home: HomePage(),
     );
   }
 }
