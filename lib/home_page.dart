@@ -20,11 +20,11 @@ class HomePage extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          bookGenreSection("Romance", 5),
+          bookGenreListHorizontal("Romance", 5),
           SizedBox(height: 20),
-          bookGenreSection("Action", 7),
+          bookGenreListHorizontal("Action", 7),
           SizedBox(height: 20),
-          bookGenreSection("Sci-fi", 10),
+          bookGenreListHorizontal("Sci-fi", 10),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
