@@ -25,21 +25,7 @@ class MyApp extends StatelessWidget {
           error: Color(0xffb00020),
         ),
       ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text("titel"),
-      ),
+      home: HomePage(),
     );
   }
 }
