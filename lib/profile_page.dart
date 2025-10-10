@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";
 
-  ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -12,15 +12,21 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int selectedTab = 0;
 
-  //Standin när det inte finns riktiga listor
   List<String> wantToReadBooks = ["Bok A", "Bok B", "Bok C"];
-  List<String> haveReadBooks = ["Bok 1", "Bok 2", "Bok 3", "Bok 4", "Bok 5", "Bok 6", "Bok 7", "Bok 8"];
+  List<String> haveReadBooks = [
+    "Bok 1",
+    "Bok 2",
+    "Bok 3",
+    "Bok 4",
+    "Bok 5",
+    "Bok 6",
+    "Bok 7",
+    "Bok 8"
+  ];
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    //lista som visas beroende på aktiv knapp
     List<String> currentList =
         selectedTab == 0 ? wantToReadBooks : haveReadBooks;
 
@@ -29,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //översta raden: username + log out
+          // Översta raden: username + log out
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -41,15 +47,30 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: colorScheme.primary,
                 ),
               ),
+              // Log out-knappen
               OutlinedButton(
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: colorScheme.error),
+                  foregroundColor: colorScheme.error,
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ).copyWith(
+                  overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                    (states) {
+                      if (states.contains(MaterialState.hovered) ||
+                          states.contains(MaterialState.pressed)) {
+                        return colorScheme.error.withOpacity(0.1);
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 child: Text(
                   "Log out",
-                  style: TextStyle(
-                    color: colorScheme.error,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -59,30 +80,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
           const SizedBox(height: 16),
 
-          //flik-knappar
+          // Flik-knappar
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildTabButton(
-                label: "Want to read",
-                isSelected: selectedTab == 0,
-                onTap: () {
-                  setState(() {
-                    selectedTab = 0;
-                  });
-                },
-                colorScheme: colorScheme,
-              ),
+                  label: "Want to read",
+                  isSelected: selectedTab == 0,
+                  onTap: () => setState(() => selectedTab = 0),
+                  colorScheme: colorScheme),
               _buildTabButton(
-                label: "Have read",
-                isSelected: selectedTab == 1,
-                onTap: () {
-                  setState(() {
-                    selectedTab = 1;
-                  });
-                },
-                colorScheme: colorScheme,
-              ),
+                  label: "Have read",
+                  isSelected: selectedTab == 1,
+                  onTap: () => setState(() => selectedTab = 1),
+                  colorScheme: colorScheme),
             ],
           ),
 
@@ -100,28 +111,76 @@ class _ProfilePageState extends State<ProfilePage> {
                 : ListView.builder(
                     itemCount: currentList.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ListTile(
-                          leading: Container(
-                            width: 50,
-                            height: 70,
-                            color: Colors.grey[300],
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            print("Klickade på ${currentList[index]}");
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.grey[200], // ljusgrå
+                            side: BorderSide(
+                              color: colorScheme.primary,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            minimumSize: const Size.fromHeight(140),
                           ),
-                          title: Text(currentList[index]),
-                          subtitle: Column(
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Författare"),
-                              const SizedBox(height: 4),
-                              Text(
-                                "#tagg1  #tagg2",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[600],
+                              Container(
+                                width: 60,
+                                height: 100,
+                                color: Colors.grey[300],
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //titel och författare
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            currentList[index],
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: colorScheme.primary,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "Författare",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: colorScheme.primary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    //taggar till höger
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "#tagg1  #tagg2",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: colorScheme.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -136,7 +195,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // Bygger en flik-knapp med tema-färger
   Widget _buildTabButton({
     required String label,
     required bool isSelected,
@@ -144,18 +202,19 @@ class _ProfilePageState extends State<ProfilePage> {
     required ColorScheme colorScheme,
   }) {
     return OutlinedButton(
+      onPressed: onTap,
       style: OutlinedButton.styleFrom(
         backgroundColor:
             isSelected ? colorScheme.primaryContainer : Colors.white,
-        side: BorderSide(
-          color: isSelected ? colorScheme.primary : Colors.grey,
+        side: BorderSide(color: colorScheme.primary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
-      onPressed: onTap,
       child: Text(
         label,
         style: TextStyle(
-          color: isSelected ? colorScheme.primary : Colors.black,
+          color: colorScheme.primary,
           fontWeight: FontWeight.bold,
         ),
       ),
