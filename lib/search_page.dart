@@ -9,15 +9,15 @@ class SearchPage extends StatefulWidget { //Huvudskärm för search_page
 
 class _SearchPageState extends State<SearchPage> { //håller koll på vilka taggar som är valda
   final Set<String> selectedTags = {};
-  bool showGenres = false; 
-  bool showTropes = false;
+  bool showGenres = false; //om genre är öppen
+  bool showTropes = false; //om tropes är öppen
 
-    void _toggleTag(String label) {
+    void _toggleTag(String label) { 
     setState(() {
       if (selectedTags.contains(label)) {
-        selectedTags.remove(label);
+        selectedTags.remove(label); //tar bort taggen om den redan är vald
       } else {
-        selectedTags.add(label);
+        selectedTags.add(label); //lägger till taggen om den inte är vald
       }
     });
   }
@@ -40,10 +40,9 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
       body: SingleChildScrollView( //gör sidan scrollbar
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, //börjar från vänster
           children: [
-            // Sökfält
-            TextField(
+            TextField( //sökfält
               decoration: InputDecoration(
                 hintText: 'Search title or author',
                 prefixIcon: const Icon(Icons.search),
@@ -81,7 +80,7 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
                   selectedTags: selectedTags,
                   onSelected: _toggleTag,
                   colorScheme: colorScheme,
-                  usePopularStyle: true,
+                  usePopularStyle: true, //ger samma stil på alla knappar
                 ),
                 _SelectableTagChip(
                   label: 'Fluff',
@@ -282,7 +281,7 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
 
 // --- Komponent ---
 
-class _SelectableTagChip extends StatelessWidget {
+class _SelectableTagChip extends StatelessWidget { //klass för alla chip, gör usePopularStyle
   final String label;
   final Set<String> selectedTags;
   final void Function(String) onSelected;
@@ -301,7 +300,7 @@ class _SelectableTagChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isSelected = selectedTags.contains(label);
 
-    final background = usePopularStyle
+    final background = usePopularStyle //dynamisk bakgrund och kant beroende på stil
         ? colorScheme.secondaryContainer.withAlpha(50)
         : colorScheme.surfaceContainerHighest;
     final selectedColor = usePopularStyle
@@ -314,7 +313,7 @@ class _SelectableTagChip extends StatelessWidget {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      onSelected: (_) => onSelected(label),
+      onSelected: (_) => onSelected(label), //kopplar med _toggleTag
       backgroundColor: background,
       selectedColor: selectedColor,
       labelStyle: TextStyle(
