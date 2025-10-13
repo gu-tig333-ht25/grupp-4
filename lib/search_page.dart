@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-  //Huvudskärm för search_page
   const SearchPage({super.key});
 
   @override
@@ -9,26 +8,24 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  //håller koll på vilka taggar som är valda
   final Set<String> selectedTags = {};
-  bool showGenres = false; //om genre är öppen
-  bool showTropes = false; //om tropes är öppen
+  bool showGenres = false;
+  bool showTropes = false;
 
   void _toggleTag(String label) {
     setState(() {
       if (selectedTags.contains(label)) {
-        selectedTags.remove(label); //tar bort taggen om den redan är vald
+        selectedTags.remove(label);
       } else {
-        selectedTags.add(label); //lägger till taggen om den inte är vald
+        selectedTags.add(label);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(
-      context,
-    ).colorScheme; //hämtar temat och färger från main
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -39,135 +36,73 @@ class _SearchPageState extends State<SearchPage> {
         foregroundColor: colorScheme.onPrimary,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        //gör sidan scrollbar
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, //börjar från vänster
-          children: [
-            TextField(
-              //sökfält
+      body: Column(
+        children: [
+          // Sökfält
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search title or author',
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
-                fillColor: colorScheme.primaryContainer.withValues(
-                  alpha: 0.08,
-                ), //opacity
+                fillColor: colorScheme.primaryContainer.withAlpha(20),
                 focusedBorder: OutlineInputBorder(
-                  //hur sökfältet ser ut när musen hovrar över
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.primary),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  //hur sökfältet ser ut när musen inte hovrar över
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.outline),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+          ),
 
-            // Populära taggar
-            Text(
-              'Popular tags:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
+          // Populära taggar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _SelectableTagChip(
-                  label: 'Romance',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true, //ger samma stil på alla knappar
-                ),
-                _SelectableTagChip(
-                  label: 'Fluff',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Angst',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Enemies to lovers',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Sci-fi',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Fantasy',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Friends to lovers',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // Filtersektion
-            Text(
-              'Filter',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.secondary,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            //Genrelistan
-            ExpansionTile(
-              title: const Text("Genres", style: TextStyle(fontSize: 16)),
-              leading: const Icon(Icons.category),
-              textColor: colorScheme.primary,
-              iconColor: colorScheme.primary,
-              onExpansionChanged: (bool expanded) {
-                setState(() => showGenres = expanded);
-              },
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
+                Text(
+                  'Popular tags:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
                   ),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                    spacing: 12,
+                    runSpacing: 12,
                     children: [
                       _SelectableTagChip(
                         label: 'Romance',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Fluff',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Angst',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Enemies to lovers',
                         selectedTags: selectedTags,
                         onSelected: _toggleTag,
                         colorScheme: colorScheme,
@@ -187,67 +122,129 @@ class _SearchPageState extends State<SearchPage> {
                         colorScheme: colorScheme,
                         usePopularStyle: true,
                       ),
+                      _SelectableTagChip(
+                        label: 'Friends to lovers',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Slow burn',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Historical fiction',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
+          ),
 
-            //Tropeslistan
-            ExpansionTile(
-              title: const Text("Tropes", style: TextStyle(fontSize: 16)),
-              leading: const Icon(Icons.favorite),
-              textColor: colorScheme.primary,
-              iconColor: colorScheme.primary,
-              onExpansionChanged: (bool expanded) {
-                setState(() => showTropes = expanded);
-              },
+          const SizedBox(height: 16),
+
+          // Filter-sektion
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _SelectableTagChip(
-                        label: 'Angst',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
+                ExpansionTile(
+                  title: const Text("Genres"),
+                  leading: const Icon(Icons.category),
+                  textColor: colorScheme.primary,
+                  iconColor: colorScheme.primary,
+                  onExpansionChanged: (expanded) {
+                    setState(() => showGenres = expanded);
+                  },
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _SelectableTagChip(
+                              label: 'Romance',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                            _SelectableTagChip(
+                              label: 'Fantasy',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                          ],
+                        ),
                       ),
-                      _SelectableTagChip(
-                        label: 'Fluff',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: const Text("Tropes"),
+                  leading: const Icon(Icons.favorite),
+                  textColor: colorScheme.primary,
+                  iconColor: colorScheme.primary,
+                  onExpansionChanged: (expanded) {
+                    setState(() => showTropes = expanded);
+                  },
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _SelectableTagChip(
+                              label: 'Angst',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                            _SelectableTagChip(
+                              label: 'Fluff',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                          ],
+                        ),
                       ),
-                      _SelectableTagChip(
-                        label: 'Enemies to lovers',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
+          ),
 
-            const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
-            // Search tagsknapp
-            SizedBox(
+          // Search-knapp
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  debugPrint("Valda taggar: $selectedTags");
-                },
+                onPressed: () => debugPrint("Valda taggar: $selectedTags"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.secondary,
                   foregroundColor: colorScheme.onSecondary,
@@ -256,22 +253,87 @@ class _SearchPageState extends State<SearchPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Search tags',
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: const Text('Search tags'),
               ),
             ),
-          ],
-        ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Boklista scrollbar
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.grey[200],
+                      side: BorderSide(color: colorScheme.primary),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      minimumSize: const Size.fromHeight(140),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 100,
+                          color: Colors.grey[300],
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Boktitel $index",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Författare",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "#tag1  #tag2",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-// --- Komponent ---
 
+// --- Komponent ---
 class _SelectableTagChip extends StatelessWidget {
-  //klass för alla chip, gör usePopularStyle
   final String label;
   final Set<String> selectedTags;
   final void Function(String) onSelected;
@@ -290,8 +352,7 @@ class _SelectableTagChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isSelected = selectedTags.contains(label);
 
-    final background =
-        usePopularStyle //dynamisk bakgrund och kant beroende på stil
+    final background = usePopularStyle
         ? colorScheme.secondaryContainer.withAlpha(50)
         : colorScheme.surfaceContainerHighest;
     final selectedColor = usePopularStyle
@@ -304,14 +365,10 @@ class _SelectableTagChip extends StatelessWidget {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      onSelected: (_) => onSelected(label), //kopplar med _toggleTag
+      onSelected: (_) => onSelected(label),
       backgroundColor: background,
       selectedColor: selectedColor,
-      labelStyle: TextStyle(
-        color: isSelected
-            ? colorScheme.onSecondaryContainer
-            : colorScheme.onSecondaryContainer,
-      ),
+      labelStyle: TextStyle(color: colorScheme.onSecondaryContainer),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: borderColor),
