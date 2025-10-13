@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'provider.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final navigationProvider = context.watch<NavigationBottomBar>();
-    final selectedIndex = navigationProvider.selectedIndex;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Name'),
@@ -28,20 +23,6 @@ class HomePage extends StatelessWidget {
           bookGenreListHorizontal("Action", 7),
           SizedBox(height: 20),
           bookGenreListHorizontal("Sci-fi", 10),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: const Color.fromARGB(83, 255, 255, 255),
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          context.read<NavigationBottomBar>().setIndex(index);
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );

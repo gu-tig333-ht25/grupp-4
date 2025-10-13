@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'home_page.dart';
-import 'provider.dart';
-
 
 class SearchPage extends StatefulWidget {
   //Huvudskärm för search_page
@@ -33,8 +29,6 @@ class _SearchPageState extends State<SearchPage> {
     final colorScheme = Theme.of(
       context,
     ).colorScheme; //hämtar temat och färger från main
-    final navigationProvider = context.watch<NavigationBottomBar>();
-    final selectedIndex = navigationProvider.selectedIndex;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -271,50 +265,9 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
       ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: const Color.fromARGB(83, 255, 255, 255),
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          context.read<NavigationBottomBar>().setIndex(index);
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
     );
   }
 }
-
-/* Bottennavigation
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: colorScheme.primary,
-        unselectedItemColor: colorScheme.onSurfaceVariant,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: 0, //vilken sida vi är på just nu, index 0 = search
-        onTap: (_) {},
-      ),
-    );
-  }
-}
-*/
 // --- Komponent ---
 
 class _SelectableTagChip extends StatelessWidget {

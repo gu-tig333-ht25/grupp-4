@@ -8,7 +8,6 @@ class NavigationBottomBar extends ChangeNotifier {
   void setIndex(int index) {
     if (_selectedIndex != index) {
       _selectedIndex = index;
-      print("$_selectedIndex");
       notifyListeners();
     }
   }
