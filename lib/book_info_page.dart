@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BookPage extends StatelessWidget {
+  const BookPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,14 +106,6 @@ class BookPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-        currentIndex: 2,
       ),
     );
   }

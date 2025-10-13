@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
-import 'profile_page.dart';
-import "search_page.dart";
-import 'book_info_page.dart';
-import 'package:template/home_page.dart';
+import 'package:provider/provider.dart';
+import 'app_provider.dart';
+import 'model.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
+        // ChangeNotifierProvider(create: (_) => BookProvider()),
+        // ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +37,7 @@ class MyApp extends StatelessWidget {
           error: Color(0xffb00020),
         ),
       ),
-      home: HomePage(),
+      home: RootPage(),
     );
   }
 }
