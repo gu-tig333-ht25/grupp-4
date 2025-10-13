@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/book_info_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -50,10 +51,20 @@ Widget bookGenreListHorizontal(String genreTitle, int itemCount) {
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.only(left: index == 0 ? 0 : 12),
-              child: Container(
-                width: 135,
-                height: 155,
-                color: Theme.of(context).secondaryHeaderColor,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BookPage()),
+                  );
+                },
+                child: Container(
+                  width: 135,
+                  height: 155,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).secondaryHeaderColor,
+                  ),
+                ),
               ),
             );
           },

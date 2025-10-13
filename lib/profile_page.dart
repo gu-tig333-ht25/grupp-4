@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'book_info_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";
@@ -21,14 +22,15 @@ class _ProfilePageState extends State<ProfilePage> {
     "Bok 5",
     "Bok 6",
     "Bok 7",
-    "Bok 8"
+    "Bok 8",
   ];
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    List<String> currentList =
-        selectedTab == 0 ? wantToReadBooks : haveReadBooks;
+    List<String> currentList = selectedTab == 0
+        ? wantToReadBooks
+        : haveReadBooks;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -50,29 +52,28 @@ class _ProfilePageState extends State<ProfilePage> {
               // Log out-knappen
               OutlinedButton(
                 onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: colorScheme.error),
-                  foregroundColor: colorScheme.error,
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ).copyWith(
-                  overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                    (states) {
-                      if (states.contains(WidgetState.hovered) ||
-                          states.contains(WidgetState.pressed)) {
-                        return colorScheme.error.withValues(alpha: 0.1);
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+                style:
+                    OutlinedButton.styleFrom(
+                      side: BorderSide(color: colorScheme.error),
+                      foregroundColor: colorScheme.error,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ).copyWith(
+                      overlayColor: WidgetStateProperty.resolveWith<Color?>((
+                        states,
+                      ) {
+                        if (states.contains(WidgetState.hovered) ||
+                            states.contains(WidgetState.pressed)) {
+                          return colorScheme.error.withValues(alpha: 0.1);
+                        }
+                        return null;
+                      }),
+                    ),
                 child: Text(
                   "Log out",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -85,15 +86,17 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildTabButton(
-                  label: "Want to read",
-                  isSelected: selectedTab == 0,
-                  onTap: () => setState(() => selectedTab = 0),
-                  colorScheme: colorScheme),
+                label: "Want to read",
+                isSelected: selectedTab == 0,
+                onTap: () => setState(() => selectedTab = 0),
+                colorScheme: colorScheme,
+              ),
               _buildTabButton(
-                  label: "Have read",
-                  isSelected: selectedTab == 1,
-                  onTap: () => setState(() => selectedTab = 1),
-                  colorScheme: colorScheme),
+                label: "Have read",
+                isSelected: selectedTab == 1,
+                onTap: () => setState(() => selectedTab = 1),
+                colorScheme: colorScheme,
+              ),
             ],
           ),
 
@@ -114,12 +117,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookPage(),
+                              ),
+                            );
+                          },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.grey[200], // ljusgrå
-                            side: BorderSide(
-                              color: colorScheme.primary,
-                            ),
+                            side: BorderSide(color: colorScheme.primary),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -202,12 +210,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return OutlinedButton(
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        backgroundColor:
-            isSelected ? colorScheme.primaryContainer : Colors.white,
+        backgroundColor: isSelected
+            ? colorScheme.primaryContainer
+            : Colors.white,
         side: BorderSide(color: colorScheme.primary),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: Text(
         label,
