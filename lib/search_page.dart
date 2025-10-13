@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'home_page.dart';
+import 'provider.dart';
 
-class SearchPage extends StatefulWidget { //Huvudskärm för search_page
+
+class SearchPage extends StatefulWidget {
+  //Huvudskärm för search_page
   const SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> { //håller koll på vilka taggar som är valda
+class _SearchPageState extends State<SearchPage> {
+  //håller koll på vilka taggar som är valda
   final Set<String> selectedTags = {};
   bool showGenres = false; //om genre är öppen
   bool showTropes = false; //om tropes är öppen
 
-    void _toggleTag(String label) { 
+  void _toggleTag(String label) {
     setState(() {
       if (selectedTags.contains(label)) {
         selectedTags.remove(label); //tar bort taggen om den redan är vald
@@ -24,8 +30,11 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme; //hämtar temat och färger från main
-
+    final colorScheme = Theme.of(
+      context,
+    ).colorScheme; //hämtar temat och färger från main
+    final navigationProvider = context.watch<NavigationBottomBar>();
+    final selectedIndex = navigationProvider.selectedIndex;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -35,24 +44,29 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
         centerTitle: true,
-        
       ),
-      body: SingleChildScrollView( //gör sidan scrollbar
+      body: SingleChildScrollView(
+        //gör sidan scrollbar
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start, //börjar från vänster
           children: [
-            TextField( //sökfält
+            TextField(
+              //sökfält
               decoration: InputDecoration(
                 hintText: 'Search title or author',
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
-                fillColor: colorScheme.primaryContainer.withValues(alpha: 0.08), //opacity
-                focusedBorder: OutlineInputBorder( //hur sökfältet ser ut när musen hovrar över
+                fillColor: colorScheme.primaryContainer.withValues(
+                  alpha: 0.08,
+                ), //opacity
+                focusedBorder: OutlineInputBorder(
+                  //hur sökfältet ser ut när musen hovrar över
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.primary),
                 ),
-                enabledBorder: OutlineInputBorder( //hur sökfältet ser ut när musen inte hovrar över
+                enabledBorder: OutlineInputBorder(
+                  //hur sökfältet ser ut när musen inte hovrar över
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.outline),
                 ),
@@ -151,7 +165,9 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -195,7 +211,9 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -228,7 +246,7 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
             ),
 
             const SizedBox(height: 24),
-            
+
             // Search tagsknapp
             SizedBox(
               width: double.infinity,
@@ -254,7 +272,25 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
         ),
       ),
 
-      // Bottennavigation
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: const Color.fromARGB(83, 255, 255, 255),
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          context.read<NavigationBottomBar>().setIndex(index);
+        },
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
+}
+
+/* Bottennavigation
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: colorScheme.primary,
         unselectedItemColor: colorScheme.onSurfaceVariant,
@@ -278,10 +314,11 @@ class _SearchPageState extends State<SearchPage> { //håller koll på vilka tagg
     );
   }
 }
-
+*/
 // --- Komponent ---
 
-class _SelectableTagChip extends StatelessWidget { //klass för alla chip, gör usePopularStyle
+class _SelectableTagChip extends StatelessWidget {
+  //klass för alla chip, gör usePopularStyle
   final String label;
   final Set<String> selectedTags;
   final void Function(String) onSelected;
@@ -300,7 +337,8 @@ class _SelectableTagChip extends StatelessWidget { //klass för alla chip, gör 
   Widget build(BuildContext context) {
     final bool isSelected = selectedTags.contains(label);
 
-    final background = usePopularStyle //dynamisk bakgrund och kant beroende på stil
+    final background =
+        usePopularStyle //dynamisk bakgrund och kant beroende på stil
         ? colorScheme.secondaryContainer.withAlpha(50)
         : colorScheme.surfaceContainerHighest;
     final selectedColor = usePopularStyle
@@ -317,7 +355,9 @@ class _SelectableTagChip extends StatelessWidget { //klass för alla chip, gör 
       backgroundColor: background,
       selectedColor: selectedColor,
       labelStyle: TextStyle(
-        color: isSelected ? colorScheme.onSecondaryContainer : colorScheme.onSecondaryContainer,
+        color: isSelected
+            ? colorScheme.onSecondaryContainer
+            : colorScheme.onSecondaryContainer,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

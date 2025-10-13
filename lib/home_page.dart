@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
-  final int selectedIndex = 1; // används för att baka in provider senare
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final navigationProvider = context.watch<NavigationBottomBar>();
+    final selectedIndex = navigationProvider.selectedIndex;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Name'),
@@ -33,7 +36,7 @@ class HomePage extends StatelessWidget {
         unselectedItemColor: const Color.fromARGB(83, 255, 255, 255),
         currentIndex: selectedIndex,
         onTap: (index) {
-          // Hanteras av Provider senare
+          context.read<NavigationBottomBar>().setIndex(index);
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
