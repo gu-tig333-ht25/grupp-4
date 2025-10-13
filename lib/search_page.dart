@@ -62,37 +62,89 @@ class _SearchPageState extends State<SearchPage> {
           // Populära taggar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Wrap(
-              spacing: 12,
-              runSpacing: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _SelectableTagChip(
-                  label: 'Romance',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
+                Text(
+                  'Popular tags:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
                 ),
-                _SelectableTagChip(
-                  label: 'Fluff',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Angst',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
-                ),
-                _SelectableTagChip(
-                  label: 'Enemies to lovers',
-                  selectedTags: selectedTags,
-                  onSelected: _toggleTag,
-                  colorScheme: colorScheme,
-                  usePopularStyle: true,
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      _SelectableTagChip(
+                        label: 'Romance',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Fluff',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Angst',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Enemies to lovers',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Fantasy',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Sci-fi',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Friends to lovers',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Slow burn',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                      _SelectableTagChip(
+                        label: 'Historical fiction',
+                        selectedTags: selectedTags,
+                        onSelected: _toggleTag,
+                        colorScheme: colorScheme,
+                        usePopularStyle: true,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -104,6 +156,7 @@ class _SearchPageState extends State<SearchPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ExpansionTile(
                   title: const Text("Genres"),
@@ -114,25 +167,31 @@ class _SearchPageState extends State<SearchPage> {
                     setState(() => showGenres = expanded);
                   },
                   children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _SelectableTagChip(
-                          label: 'Romance',
-                          selectedTags: selectedTags,
-                          onSelected: _toggleTag,
-                          colorScheme: colorScheme,
-                          usePopularStyle: true,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _SelectableTagChip(
+                              label: 'Romance',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                            _SelectableTagChip(
+                              label: 'Fantasy',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                          ],
                         ),
-                        _SelectableTagChip(
-                          label: 'Fantasy',
-                          selectedTags: selectedTags,
-                          onSelected: _toggleTag,
-                          colorScheme: colorScheme,
-                          usePopularStyle: true,
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -145,25 +204,31 @@ class _SearchPageState extends State<SearchPage> {
                     setState(() => showTropes = expanded);
                   },
                   children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _SelectableTagChip(
-                          label: 'Angst',
-                          selectedTags: selectedTags,
-                          onSelected: _toggleTag,
-                          colorScheme: colorScheme,
-                          usePopularStyle: true,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _SelectableTagChip(
+                              label: 'Angst',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                            _SelectableTagChip(
+                              label: 'Fluff',
+                              selectedTags: selectedTags,
+                              onSelected: _toggleTag,
+                              colorScheme: colorScheme,
+                              usePopularStyle: true,
+                            ),
+                          ],
                         ),
-                        _SelectableTagChip(
-                          label: 'Fluff',
-                          selectedTags: selectedTags,
-                          onSelected: _toggleTag,
-                          colorScheme: colorScheme,
-                          usePopularStyle: true,
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
