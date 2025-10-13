@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
-  final int selectedIndex = 1; // används för att baka in provider senare
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +23,6 @@ class HomePage extends StatelessWidget {
           bookGenreListHorizontal("Action", 7),
           SizedBox(height: 20),
           bookGenreListHorizontal("Sci-fi", 10),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: const Color.fromARGB(83, 255, 255, 255),
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          // Hanteras av Provider senare
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );

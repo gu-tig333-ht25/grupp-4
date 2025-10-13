@@ -58,11 +58,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ).copyWith(
-                  overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                  overlayColor: WidgetStateProperty.resolveWith<Color?>(
                     (states) {
-                      if (states.contains(MaterialState.hovered) ||
-                          states.contains(MaterialState.pressed)) {
-                        return colorScheme.error.withOpacity(0.1);
+                      if (states.contains(WidgetState.hovered) ||
+                          states.contains(WidgetState.pressed)) {
+                        return colorScheme.error.withValues(alpha: 0.1);
                       }
                       return null;
                     },
@@ -114,9 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: OutlinedButton(
-                          onPressed: () {
-                            print("Klickade på ${currentList[index]}");
-                          },
+                          onPressed: () {},
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.grey[200], // ljusgrå
                             side: BorderSide(
