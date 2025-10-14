@@ -79,8 +79,8 @@ class _SearchPageState extends State<SearchPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
+                      spacing: 8,
+                      runSpacing: 5,
                       children: [
                         _SelectableTagChip(
                           label: 'Romance',
@@ -119,13 +119,6 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         _SelectableTagChip(
                           label: 'Sci-fi',
-                          selectedTags: selectedTags,
-                          onSelected: _toggleTag,
-                          colorScheme: colorScheme,
-                          usePopularStyle: true,
-                        ),
-                        _SelectableTagChip(
-                          label: 'Friends to lovers',
                           selectedTags: selectedTags,
                           onSelected: _toggleTag,
                           colorScheme: colorScheme,
