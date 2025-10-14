@@ -37,6 +37,8 @@ class Books {
   int year;
   String genre;
   List<String> tropes;
+  int? coverId;
+  
 
   Books({
     this.id = "",
@@ -45,7 +47,13 @@ class Books {
     this.year = 0,
     this.genre = "",
     this.tropes = const [],
+    this.coverId,
   });
+
+String get coverUrl => coverId != null
+      ? 'https://covers.openlibrary.org/b/id/$coverId-M.jpg'
+      : 'https://via.placeholder.com/60x100';
+
 
   factory Books.fromJson(Map<String, dynamic> json) {
     return Books(
@@ -56,7 +64,7 @@ class Books {
           : 'Unknown author',
       year: (json['first_publish_year'] ?? 0),
       genre: '', // OpenLibrary ger inte detta direkt
-      tropes: [],
+      tropes: []
     );
   }
 }

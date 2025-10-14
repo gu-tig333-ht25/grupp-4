@@ -17,7 +17,14 @@ class BookProvider extends ChangeNotifier {
 
     try {
       final url = Uri.parse('https://openlibrary.org/search.json?q=$query');
-      final response = await http.get(url);
+      final response = await http.get(
+      url,
+      headers: {
+        'User-Agent': 'SchoolProjectBookApp/1.0 (10benny10ben10@gmail.com)',
+      },
+    );
+
+  
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
