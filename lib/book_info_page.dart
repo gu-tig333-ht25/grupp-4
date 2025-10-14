@@ -63,6 +63,7 @@ class BookPage extends StatelessWidget {
                       child: FloatingActionButton.extended(
                         onPressed: () {},
                         label: Text('Want to read'),
+                        heroTag: "wantToRead",
                       ),
                     ),
                     SizedBox(height: 10),
@@ -71,6 +72,7 @@ class BookPage extends StatelessWidget {
                       child: FloatingActionButton.extended(
                         onPressed: () {},
                         label: Text('Have read'),
+                        heroTag: "haveRead",
                       ),
                     ),
                   ],
