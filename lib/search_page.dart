@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'book_info_page.dart';
+import 'api_getbooks.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -8,6 +11,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _searchController = TextEditingController();
   final Set<String> selectedTags = {};
   bool showGenres = false;
   bool showTropes = false;
@@ -22,9 +26,17 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  void _searchBooks(BuildContext context) {
+      final query = _searchController.text.trim();
+        if (query.isNotEmpty) {
+        context.read<BookProvider>().fetchBooks(query);
+      }
+    }
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final bookProvider = context.watch<BookProvider>();
+
 
     return Scaffold(
       appBar: AppBar(
@@ -42,9 +54,14 @@ class _SearchPageState extends State<SearchPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search title or author',
                 prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () => _searchBooks(context),
+                ),
                 filled: true,
                 fillColor: colorScheme.primaryContainer.withAlpha(20),
                 focusedBorder: OutlineInputBorder(
@@ -56,6 +73,7 @@ class _SearchPageState extends State<SearchPage> {
                   borderSide: BorderSide(color: colorScheme.outline),
                 ),
               ),
+              onSubmitted: (_) => _searchBooks(context),
             ),
           ),
 
@@ -80,69 +98,24 @@ class _SearchPageState extends State<SearchPage> {
                     spacing: 12,
                     runSpacing: 12,
                     children: [
-                      _SelectableTagChip(
-                        label: 'Romance',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Fluff',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Angst',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Enemies to lovers',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Fantasy',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Sci-fi',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Friends to lovers',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Slow burn',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
-                      _SelectableTagChip(
-                        label: 'Historical fiction',
-                        selectedTags: selectedTags,
-                        onSelected: _toggleTag,
-                        colorScheme: colorScheme,
-                        usePopularStyle: true,
-                      ),
+                      for (final tag in [
+                        'Romance',
+                        'Fluff',
+                        'Angst',
+                        'Enemies to lovers',
+                        'Fantasy',
+                        'Sci-fi',
+                        'Friends to lovers',
+                        'Slow burn',
+                        'Historical fiction'
+                      ])
+                        _SelectableTagChip(
+                          label: tag,
+                          selectedTags: selectedTags,
+                          onSelected: _toggleTag,
+                          colorScheme: colorScheme,
+                          usePopularStyle: true,
+                        ),
                     ],
                   ),
                 ),
@@ -175,20 +148,13 @@ class _SearchPageState extends State<SearchPage> {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            _SelectableTagChip(
-                              label: 'Romance',
-                              selectedTags: selectedTags,
-                              onSelected: _toggleTag,
-                              colorScheme: colorScheme,
-                              usePopularStyle: true,
-                            ),
-                            _SelectableTagChip(
-                              label: 'Fantasy',
-                              selectedTags: selectedTags,
-                              onSelected: _toggleTag,
-                              colorScheme: colorScheme,
-                              usePopularStyle: true,
-                            ),
+                            for (final genre in ['Romance', 'Fantasy'])
+                              _SelectableTagChip(
+                                label: genre,
+                                selectedTags: selectedTags,
+                                onSelected: _toggleTag,
+                                colorScheme: colorScheme,
+                              ),
                           ],
                         ),
                       ),
@@ -212,20 +178,13 @@ class _SearchPageState extends State<SearchPage> {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            _SelectableTagChip(
-                              label: 'Angst',
-                              selectedTags: selectedTags,
-                              onSelected: _toggleTag,
-                              colorScheme: colorScheme,
-                              usePopularStyle: true,
-                            ),
-                            _SelectableTagChip(
-                              label: 'Fluff',
-                              selectedTags: selectedTags,
-                              onSelected: _toggleTag,
-                              colorScheme: colorScheme,
-                              usePopularStyle: true,
-                            ),
+                            for (final trope in ['Angst', 'Fluff'])
+                              _SelectableTagChip(
+                                label: trope,
+                                selectedTags: selectedTags,
+                                onSelected: _toggleTag,
+                                colorScheme: colorScheme,
+                              ),
                           ],
                         ),
                       ),
@@ -235,7 +194,6 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           ),
-
           const SizedBox(height: 16),
 
           // Search-knapp
@@ -244,7 +202,7 @@ class _SearchPageState extends State<SearchPage> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => debugPrint("Valda taggar: $selectedTags"),
+                onPressed: () => _searchBooks(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.secondary,
                   foregroundColor: colorScheme.onSecondary,
@@ -261,70 +219,97 @@ class _SearchPageState extends State<SearchPage> {
           const SizedBox(height: 16),
 
           // Boklista scrollbar
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      side: BorderSide(color: colorScheme.primary),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                    Expanded(
+            child: Builder(builder: (context) {
+              if (bookProvider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (bookProvider.books.isEmpty) {
+                return const Center(child: Text('No books found.'));
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: bookProvider.books.length,
+                itemBuilder: (context, index) {
+                  final book = bookProvider.books[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const BookPage()),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.grey[200],
+                        side: BorderSide(color: colorScheme.primary),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        minimumSize: const Size.fromHeight(140),
                       ),
-                      padding: const EdgeInsets.all(16),
-                      minimumSize: const Size.fromHeight(140),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 100,
-                          color: Colors.grey[300],
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Boktitel $index",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Omslag
+                          Container(
+                            width: 60,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[300],
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(book.coverUrl),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Författare",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: colorScheme.primary,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "#tag1  #tag2",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: colorScheme.primary,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 16),
+                          // Bokinfo
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  book.title,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  book.author,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  book.year > 0
+                                      ? "Published: ${book.year}"
+                                      : "",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
