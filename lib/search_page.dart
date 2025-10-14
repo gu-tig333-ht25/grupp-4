@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'book_info_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -278,7 +279,12 @@ class _SearchPageState extends State<SearchPage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => BookPage()),
+                      );
+                    },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.grey[200],
                       side: BorderSide(color: colorScheme.primary),
