@@ -29,6 +29,7 @@ class RootPage extends StatelessWidget {
   }
 }
 
+//bokmodell
 class Books {
   String id;
   String title;
@@ -45,4 +46,17 @@ class Books {
     this.genre = "",
     this.tropes = const [],
   });
+
+  factory Books.fromJson(Map<String, dynamic> json) {
+    return Books(
+      id: json['key'] ?? '',
+      title: json['title'] ?? 'Unknown title',
+      author: (json['author_name'] != null && json['author_name'].isNotEmpty)
+          ? json['author_name'][0]
+          : 'Unknown author',
+      year: (json['first_publish_year'] ?? 0),
+      genre: '', // OpenLibrary ger inte detta direkt
+      tropes: [],
+    );
+  }
 }
