@@ -28,3 +28,21 @@ class RootPage extends StatelessWidget {
     );
   }
 }
+
+class Books {
+  String id;
+  String title;
+  String author;
+  int year;
+  String genre;
+  List<String> tropes;
+
+  Books({
+    this.id = "",
+    this.title = "",
+    this.author = "",
+    this.year = 0,
+    this.genre = "",
+    this.tropes = const [],
+  });
+}

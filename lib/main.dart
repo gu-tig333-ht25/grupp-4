@@ -9,7 +9,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
-        // ChangeNotifierProvider(create: (_) => BookProvider()),
+        ChangeNotifierProvider(create: (_) => BookProvider()),
         // ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MyApp(),
