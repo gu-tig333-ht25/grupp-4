@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'api_getbooks.dart';
+import 'model.dart';
 
 class BookPage extends StatelessWidget {
-  const BookPage({super.key});
+  final Books book;
+
+  const BookPage({super.key, required this.book});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +34,10 @@ class BookPage extends StatelessWidget {
                   width: 80,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(book.coverUrl),
+                    ),
                   ),
                   child: Text('Book cover'),
                 ),
@@ -45,9 +53,9 @@ class BookPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Title'),
-                        Text('Author'),
-                        Text('Published'),
+                        Text('Title: ${book.title}'),
+                        Text('Author: ${book.author}'),
+                        Text('Published: ${book.year}'),
                       ],
                     ),
                   ),

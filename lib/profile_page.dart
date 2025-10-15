@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'book_info_page.dart';
+import 'model.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";
@@ -13,22 +14,13 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int selectedTab = 0;
 
-  List<String> wantToReadBooks = ["Bok A", "Bok B", "Bok C"];
-  List<String> haveReadBooks = [
-    "Bok 1",
-    "Bok 2",
-    "Bok 3",
-    "Bok 4",
-    "Bok 5",
-    "Bok 6",
-    "Bok 7",
-    "Bok 8",
-  ];
+  List<Books> wantToReadBooks = [];
+  List<Books> haveReadBooks = [];
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    List<String> currentList = selectedTab == 0
+    List<Books> currentList = selectedTab == 0
         ? wantToReadBooks
         : haveReadBooks;
 
@@ -121,7 +113,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BookPage(),
+                                builder: (context) =>
+                                    BookPage(book: currentList[index]),
                               ),
                             );
                           },
@@ -154,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            currentList[index],
+                                            '${currentList[index]}',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
