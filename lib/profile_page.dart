@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: currentList.isEmpty
                 ? Center(
                     child: Text(
-                      "Inga böcker här än!",
+                      "No books in this list",
                       style: TextStyle(fontSize: 16),
                     ),
                   )
@@ -156,7 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
-                                            "Författare",
+                                            "Author",
                                             style: TextStyle(
                                               fontSize: 20,
                                               color: colorScheme.primary,
