@@ -28,7 +28,6 @@ class BookPage extends StatelessWidget {
                 Container(
                   height: 122,
                   width: 80,
-                  //margin: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
                   ),
@@ -53,29 +52,34 @@ class BookPage extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                Expanded(child: Container()),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: FloatingActionButton.extended(
-                        onPressed: () {},
-                        label: Text('Want to read'),
-                        heroTag: "wantToRead",
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: FloatingActionButton.extended(
-                        onPressed: () {},
-                        label: Text('Have read'),
-                        heroTag: "haveRead",
-                      ),
-                    ),
-                  ],
+                SizedBox(width: 5),
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: constraints.maxWidth,
+                            child: FloatingActionButton.extended(
+                              onPressed: () {},
+                              label: Text('Want to read'),
+                              heroTag: "wantToRead",
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: constraints.maxWidth,
+                            child: FloatingActionButton.extended(
+                              onPressed: () {},
+                              label: Text('Have read'),
+                              heroTag: "haveRead",
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
