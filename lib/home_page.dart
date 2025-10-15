@@ -1,22 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:template/book_info_page.dart';
-import 'book_list.dart';
 import 'model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final List<String> authors = [
+    "Colleen Hoover",
+    "Ali Hazelwood",
+    "Brandon Sanderson",
+  ];
+
+  Map<String, List<Books>> booksByAuthor = {};
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBooksForAuthors();
+  }
+
+  Future<void> fetchBooksForAuthors() async {
+    for (var author in authors) {
+      final url = Uri.parse(
+        'https://openlibrary.org/search.json?author=${Uri.encodeComponent(author)}',
+      );
+      final response = await http.get(
+        url,
+        headers: {
+          'User-Agent': 'SchoolProjectBookApp/1.0 (10benny10ben10@gmail.com)',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final docs = data['docs'] as List;
+
+        final books = docs
+            .map((e) => Books.fromJson(e))
+            .take(5) // max 5 böcker per författare
+            .toList();
+
+        booksByAuthor[author] = books;
+      } else {
+        booksByAuthor[author] = [];
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final bookList = demoBooks;
-    final romanceBooks = bookList.where((b) => b.genre == 'Romance').toList();
-    final dystopianBooks = bookList
-        .where((b) => b.genre == 'Dystopian')
-        .toList();
-    final historicalFictionBooks = bookList
-        .where((b) => b.genre == 'Historical Fiction')
-        .toList();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Name'),
@@ -30,11 +74,11 @@ class HomePage extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          bookGenreListHorizontal(romanceBooks),
+          bookGenreListHorizontal(booksByAuthor["Colleen Hoover"] ?? []),
           SizedBox(height: 20),
-          bookGenreListHorizontal(dystopianBooks),
+          bookGenreListHorizontal(booksByAuthor["Ali Hazelwood"] ?? []),
           SizedBox(height: 20),
-          bookGenreListHorizontal(historicalFictionBooks),
+          bookGenreListHorizontal(booksByAuthor["Brandon Sanderson"] ?? []),
         ],
       ),
     );
@@ -42,8 +86,11 @@ class HomePage extends StatelessWidget {
 }
 
 Widget bookGenreListHorizontal(List<Books> bookInfo) {
-  // Ska ta emot en sorterad genre lista av böcker
-  String bookGenre = bookInfo.isNotEmpty ? bookInfo.first.genre : "Okänd genre";
+  // Ska ta emot en sorterad lista av böcker
+  String bookAuthor = bookInfo.isNotEmpty
+      ? bookInfo.first.author
+      : "Okänd author";
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -51,7 +98,7 @@ Widget bookGenreListHorizontal(List<Books> bookInfo) {
       Container(
         margin: EdgeInsets.only(bottom: 4),
         child: Text(
-          bookGenre,
+          bookAuthor,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
@@ -68,24 +115,19 @@ Widget bookGenreListHorizontal(List<Books> bookInfo) {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BookPage()),
+                    MaterialPageRoute(
+                      builder: (context) => BookPage(book: bookInfo[index]),
+                    ),
                   );
                 },
                 child: Container(
-                  width: 135,
+                  width: 125,
                   height: 155,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).secondaryHeaderColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      bookInfo[index].title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Colors.white,
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: NetworkImage(bookInfo[index].coverUrl),
                     ),
                   ),
                 ),

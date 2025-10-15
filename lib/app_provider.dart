@@ -12,4 +12,3 @@ class NavigationBottomBar extends ChangeNotifier {
     }
   }
 }
-

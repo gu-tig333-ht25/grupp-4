@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class BookPage extends StatelessWidget {
-  const BookPage({super.key});
+  final Books book;
+
+  const BookPage({super.key, required this.book});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,25 +34,24 @@ class BookPage extends StatelessWidget {
                   height: 122,
                   width: 80,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(book.coverUrl),
+                    ),
                   ),
-                  child: Text('Book cover'),
                 ),
                 Container(
                   height: 122,
                   width: 200,
                   margin: EdgeInsets.only(left: 5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Title'),
-                        Text('Author'),
-                        Text('Published'),
+                        Text('Title: ${book.title}'),
+                        Text('Author: ${book.author}'),
+                        Text('Published: ${book.year}'),
                       ],
                     ),
                   ),
@@ -106,7 +110,20 @@ class BookPage extends StatelessWidget {
                   border: Border.all(color: Colors.black),
                 ),
                 child: SingleChildScrollView(
-                  child: Text('Book description ...' * 70),
+                  child: FutureBuilder<String>(
+                    future: fetchDescription(book.workKey),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text("Error loading description");
+                      } else {
+                        return Text(
+                          snapshot.data ?? "No description available",
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
@@ -114,5 +131,24 @@ class BookPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<String> fetchDescription(String workKey) async {
+    if (workKey.isEmpty) return "No description available";
+    final url = Uri.parse("https://openlibrary.org$workKey.json");
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['description'] is String) {
+          return data['description'];
+        } else if (data['description']?['value'] != null) {
+          return data['description']['value'];
+        }
+      }
+    } catch (e) {
+      print("Error fetching description: $e");
+    }
+    return "No description available";
   }
 }

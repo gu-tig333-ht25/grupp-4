@@ -249,9 +249,12 @@ class _SearchPageState extends State<SearchPage> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: OutlinedButton(
                         onPressed: () {
+                          final book = bookProvider.books[index];
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const BookPage()),
+                            MaterialPageRoute(
+                              builder: (_) => BookPage(book: book),
+                            ),
                           );
                         },
                         style: OutlinedButton.styleFrom(
