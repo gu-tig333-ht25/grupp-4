@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:525406215989:web:9f89a13db8ff3d799db67c',
     messagingSenderId: '525406215989',
     projectId: 'bookapp-ce0b3',
-    databaseURL:'//bookapp-ce0b3-default-rtdb.firebaseio.com',
+    databaseURL: 'https://bookapp-ce0b3-default-rtdb.firebaseio.com',
     authDomain: 'bookapp-ce0b3.firebaseapp.com',
     storageBucket: 'bookapp-ce0b3.firebasestorage.app',
     measurementId: 'G-MHR5J2KQ26',
@@ -65,7 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:525406215989:android:4ab0a264a5f3cd099db67c',
     messagingSenderId: '525406215989',
     projectId: 'bookapp-ce0b3',
-    databaseURL:'//bookapp-ce0b3-default-rtdb.firebaseio.com',
+    databaseURL: 'https://bookapp-ce0b3-default-rtdb.firebaseio.com',
     storageBucket: 'bookapp-ce0b3.firebasestorage.app',
   );
 }

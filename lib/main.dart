@@ -1,47 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'firebase_options.dart';
 import 'app_provider.dart';
 import 'model.dart';
 import 'api_getbooks.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'app_provider.dart'; // importera din RootPage
+
+Future<void> testFirebaseConnection() async {
+  try {
+    final ref = FirebaseDatabase.instance.ref("testConnection");
+
+    // Lyssna på ändringar på noden
+    ref.onValue.listen((event) {
+      final value = event.snapshot.value;
+      print("📡 Firebase node 'testConnection' ändrades: $value");
+    });
+
+    // Sätt ett värde temporärt
+    await ref.set("ping");
+    print("🔥 Ping skickat till Firebase!");
+
+    // Vänta lite innan vi raderar (för att se lyssnaren i action)
+    await Future.delayed(const Duration(seconds: 1));
+
+    await ref.remove();
+    print("🧹 Ping nod borttagen");
+
+  } catch (e) {
+    print("⚠️ Firebase test misslyckades: $e");
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // --- Minimal test av Firebase Realtime Database ---
-  try {
-    final ref = FirebaseDatabase.instance.ref("testConnection");
-    await ref.set("ping"); // Skicka upp
-    await ref.remove(); // Ta bort direkt
-    print("Firebase koppling: lyckades!");
-  } catch (e) {
-    print("Firebase koppling: misslyckades! $e");
-  }
+  print("🔹 Init start");
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  print("✅ Firebase init klar");
+
+  // Kör vårt test i bakgrunden (icke-blockerande)
+  Future.microtask(() => testFirebaseConnection());
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
         ChangeNotifierProvider(create: (_) => BookProvider()),
-        // ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BookApp',
       debugShowCheckedModeBanner: false,
       theme: FlexThemeData.light(
         colors: const FlexSchemeColor(
@@ -55,7 +79,7 @@ class MyApp extends StatelessWidget {
           error: Color(0xffb00020),
         ),
       ),
-      home: RootPage(),
+      home: const RootPage(),
     );
   }
 }
