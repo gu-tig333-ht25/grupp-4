@@ -51,7 +51,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
     apiKey: 'AIzaSyCBepnKNmalBGb4Vqk8UJUjLTX7qMYigSs',
     appId: '1:525406215989:web:9f89a13db8ff3d799db67c',
 >>>>>>> Stashed changes
