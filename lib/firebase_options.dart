@@ -50,7 +50,6 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    appId: '1:525406215989:web:9f89a13db8ff3d799db67c',
     messagingSenderId: '525406215989',
     projectId: 'bookapp-ce0b3',
     authDomain: 'bookapp-ce0b3.firebaseapp.com',
