@@ -7,10 +7,22 @@ import 'api_getbooks.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // --- Minimal test av Firebase Realtime Database ---
+  try {
+    final ref = FirebaseDatabase.instance.ref("testConnection");
+    await ref.set("ping"); // Skicka upp
+    await ref.remove(); // Ta bort direkt
+    print("Firebase koppling: lyckades!");
+  } catch (e) {
+    print("Firebase koppling: misslyckades! $e");
+  }
+
   runApp(
     MultiProvider(
       providers: [

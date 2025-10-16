@@ -50,17 +50,25 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
+<<<<<<< Updated upstream
+=======
+    apiKey: 'AIzaSyCBepnKNmalBGb4Vqk8UJUjLTX7qMYigSs',
+    appId: '1:525406215989:web:9f89a13db8ff3d799db67c',
+>>>>>>> Stashed changes
     messagingSenderId: '525406215989',
     projectId: 'bookapp-ce0b3',
+    databaseURL:'//bookapp-ce0b3-default-rtdb.firebaseio.com',
     authDomain: 'bookapp-ce0b3.firebaseapp.com',
     storageBucket: 'bookapp-ce0b3.firebasestorage.app',
     measurementId: 'G-MHR5J2KQ26',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyDLB4S7Yvq0X4SUFGp3t75gpLCWeMp29xg',
     appId: '1:525406215989:android:4ab0a264a5f3cd099db67c',
     messagingSenderId: '525406215989',
     projectId: 'bookapp-ce0b3',
+    databaseURL:'//bookapp-ce0b3-default-rtdb.firebaseio.com',
     storageBucket: 'bookapp-ce0b3.firebasestorage.app',
   );
 }
