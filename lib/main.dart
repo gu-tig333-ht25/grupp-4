@@ -8,56 +8,12 @@ import 'firebase_options.dart';
 import 'app_provider.dart';
 import 'model.dart';
 import 'api_getbooks.dart';
-
-/// Logga in automatiskt med testkonto
-Future<User?> loginTestUser() async {
-  try {
-    const email = "wilma@example.com";  // ersätt med ert testkonto
-    const password = "test1234";        // ersätt med lösenord
-
-    final cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    print("Inloggad som ${cred.user?.email} (UID: ${cred.user?.uid})");
-    return cred.user;
-  } catch (e) {
-    print("Inloggning misslyckades: $e");
-    return null;
-  }
-}
-
-/// Testar att skriva och läsa användardata i Realtime Database
-Future<void> testUserData(User user) async {
-  try {
-    final db = FirebaseDatabase.instance.ref("users/${user.uid}");
-
-    await db.set({
-      "name": "Wilma Test",
-      "email": user.email,
-      "wantToRead": ["book_001", "book_002"],
-      "haveRead": ["book_003"]
-    });
-
-    final snapshot = await db.get();
-    if (snapshot.exists) {
-      print("Hämtad användardata:");
-      print(snapshot.value);
-    } else {
-      print("Ingen data hittades!");
-    }
-  } catch (e) {
-    print("Fel vid testUserData: $e");
-  }
-}
+import 'user_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Logga in testkonto
   final user = await loginTestUser();
@@ -73,7 +29,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
         ChangeNotifierProvider(create: (_) => BookProvider()),
-        //ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: const MyApp(),
     ),

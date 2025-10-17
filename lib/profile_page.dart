@@ -1,7 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:template/user_provider.dart';
 import 'book_info_page.dart';
 import 'model.dart';
+import 'user_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";
@@ -20,61 +24,46 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
     final colorScheme = Theme.of(context).colorScheme;
-    List<Books> currentList = selectedTab == 0
-        ? wantToReadBooks
-        : haveReadBooks;
+
+    if (userProvider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final List<Books> currentList = selectedTab == 0
+        ? userProvider.wantToRead
+        : userProvider.haveRead;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Översta raden: username + log out
+          // Username
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '@${widget.username}',
+                '@${userProvider.username}',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
                 ),
               ),
-              // Log out-knappen
               OutlinedButton(
-                onPressed: () {},
-                style:
-                    OutlinedButton.styleFrom(
-                      side: BorderSide(color: colorScheme.error),
-                      foregroundColor: colorScheme.error,
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ).copyWith(
-                      overlayColor: WidgetStateProperty.resolveWith<Color?>((
-                        states,
-                      ) {
-                        if (states.contains(WidgetState.hovered) ||
-                            states.contains(WidgetState.pressed)) {
-                          return colorScheme.error.withValues(alpha: 0.1);
-                        }
-                        return null;
-                      }),
-                    ),
-                child: Text(
-                  "Log out",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                },
+                child: const Text("Log out"),
               ),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          // Flik-knappar
+          // Tabbar
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -95,18 +84,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
           const SizedBox(height: 16),
 
-          // Boklista
+          // Boklistan
           Expanded(
             child: currentList.isEmpty
-                ? Center(
-                    child: Text(
-                      "No books in this list",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  )
+                ? const Center(child: Text("No books in this list"))
                 : ListView.builder(
                     itemCount: currentList.length,
                     itemBuilder: (context, index) {
+                      final book = currentList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: OutlinedButton(
@@ -114,13 +99,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    BookPage(book: currentList[index]),
+                                builder: (_) => BookPage(book: book),
                               ),
                             );
                           },
                           style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.grey[200], // ljusgrå
+                            backgroundColor: Colors.grey[200],
                             side: BorderSide(color: colorScheme.primary),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -138,47 +122,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: Row(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    //titel och författare
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${currentList[index]}',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: colorScheme.primary,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            "Author",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: colorScheme.primary,
-                                            ),
-                                          ),
-                                        ],
+                                    Text(
+                                      book.title,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: colorScheme.primary,
                                       ),
                                     ),
-                                    //taggar till höger
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          "#tagg1  #tagg2",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: colorScheme.primary,
-                                          ),
-                                        ),
-                                      ],
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      book.author,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: colorScheme.primary,
+                                      ),
                                     ),
                                   ],
                                 ),
