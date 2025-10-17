@@ -63,6 +63,47 @@ class UserProvider extends ChangeNotifier {
     loadUserData();
   }
 
+  // --- Lägg till bok i WantToRead ---
+  Future<void> addBookToWantToRead(String bookId) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    final dbRef = _db.child("users/${user.uid}/wantToRead");
+    final snapshot = await dbRef.get();
+    List currentList = [];
+    if (snapshot.exists) {
+      currentList = List.from(snapshot.value as List);
+    }
+    if (!currentList.contains(bookId)) {
+      currentList.add(bookId);
+      await dbRef.set(currentList);
+      // Uppdatera lokalt
+      wantToRead.add(Books(id: bookId, title: bookId));
+      notifyListeners();
+    }
+  }
+
+  // --- Lägg till bok i HaveRead ---
+  Future<void> addBookToHaveRead(String bookId) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    final dbRef = _db.child("users/${user.uid}/haveRead");
+    final snapshot = await dbRef.get();
+    List currentList = [];
+    if (snapshot.exists) {
+      currentList = List.from(snapshot.value as List);
+    }
+    if (!currentList.contains(bookId)) {
+      currentList.add(bookId);
+      await dbRef.set(currentList);
+      // Uppdatera lokalt
+      haveRead.add(Books(id: bookId, title: bookId));
+      notifyListeners();
+    }
+  }
+
+  // --- Ladda användardata från Firebase ---
   Future<void> loadUserData() async {
     final user = _auth.currentUser;
     if (user == null) return;
@@ -73,14 +114,15 @@ class UserProvider extends ChangeNotifier {
 
       final snapshot = await _db.child("users/${user.uid}").get();
       if (snapshot.exists) {
-        final data = snapshot.value as Map<dynamic, dynamic>;
+        final data = Map<String, dynamic>.from(snapshot.value as Map);
+
         username = data['name'] ?? '';
         email = data['email'] ?? '';
 
-        // Böcker: använd ID:n direkt som placeholder
         final wantIds = List<String>.from(data['wantToRead'] ?? []);
         final haveIds = List<String>.from(data['haveRead'] ?? []);
 
+        // Vi mappar ID:n till Books med placeholder title (du kan senare hämta full info från API)
         wantToRead = wantIds.map((id) => Books(id: id, title: id)).toList();
         haveRead = haveIds.map((id) => Books(id: id, title: id)).toList();
       }
