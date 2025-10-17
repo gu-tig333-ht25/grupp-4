@@ -7,45 +7,28 @@ import 'firebase_options.dart';
 import 'app_provider.dart';
 import 'model.dart';
 import 'api_getbooks.dart';
-import 'app_provider.dart'; // importera din RootPage
 
 Future<void> testFirebaseConnection() async {
   try {
     final ref = FirebaseDatabase.instance.ref("testConnection");
 
-    // Lyssna på ändringar på noden
     ref.onValue.listen((event) {
       final value = event.snapshot.value;
-      print("📡 Firebase node 'testConnection' ändrades: $value");
+      print("Firebase node 'testConnection' ändrades: $value");
     });
 
-    // Sätt ett värde temporärt
-    await ref.set("ping");
-    print("🔥 Ping skickat till Firebase!");
-
-    // Vänta lite innan vi raderar (för att se lyssnaren i action)
-    await Future.delayed(const Duration(seconds: 1));
-
-    await ref.remove();
-    print("🧹 Ping nod borttagen");
-
+    await ref.set("pong");
+    print("Ping skickat till Firebase!");
   } catch (e) {
-    print("⚠️ Firebase test misslyckades: $e");
+    print("Firebase test misslyckades: $e");
   }
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  print("🔹 Init start");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  print("✅ Firebase init klar");
-
-  // Kör vårt test i bakgrunden (icke-blockerande)
   Future.microtask(() => testFirebaseConnection());
 
   runApp(
