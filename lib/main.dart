@@ -2,34 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
 import 'app_provider.dart';
 import 'model.dart';
 import 'api_getbooks.dart';
 
-Future<void> testFirebaseConnection() async {
+/// Logga in automatiskt med testkonto
+Future<User?> loginTestUser() async {
   try {
-    final ref = FirebaseDatabase.instance.ref("testConnection");
+    const email = "wilma@example.com";  // ersätt med ert testkonto
+    const password = "test1234";        // ersätt med lösenord
 
-    ref.onValue.listen((event) {
-      final value = event.snapshot.value;
-      print("Firebase node 'testConnection' ändrades: $value");
+    final cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    print("Inloggad som ${cred.user?.email} (UID: ${cred.user?.uid})");
+    return cred.user;
+  } catch (e) {
+    print("Inloggning misslyckades: $e");
+    return null;
+  }
+}
+
+/// Testar att skriva och läsa användardata i Realtime Database
+Future<void> testUserData(User user) async {
+  try {
+    final db = FirebaseDatabase.instance.ref("users/${user.uid}");
+
+    await db.set({
+      "name": "Wilma Test",
+      "email": user.email,
+      "wantToRead": ["book_001", "book_002"],
+      "haveRead": ["book_003"]
     });
 
-    await ref.set("pong");
-    print("Ping skickat till Firebase!");
+    final snapshot = await db.get();
+    if (snapshot.exists) {
+      print("Hämtad användardata:");
+      print(snapshot.value);
+    } else {
+      print("Ingen data hittades!");
+    }
   } catch (e) {
-    print("Firebase test misslyckades: $e");
+    print("Fel vid testUserData: $e");
   }
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Logga in testkonto
+  final user = await loginTestUser();
+  if (user == null) {
+    print("Kan inte fortsätta utan inloggning!");
+    return;
+  }
 
-  Future.microtask(() => testFirebaseConnection());
+  await testUserData(user);
 
   runApp(
     MultiProvider(
