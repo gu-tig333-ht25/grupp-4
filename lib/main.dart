@@ -73,6 +73,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
         ChangeNotifierProvider(create: (_) => BookProvider()),
+        //ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: const MyApp(),
     ),
