@@ -58,17 +58,67 @@ class Books {
       : 'https://via.placeholder.com/60x100';
 
   factory Books.fromJson(Map<String, dynamic> json) {
+    int? parseInt(dynamic v) {
+      if (v == null) return null;
+      if (v is int) return v;
+      if (v is double) return v.toInt();
+      if (v is String) return int.tryParse(v);
+      return null;
+    }
+
+    final bool isOpenLibrary =
+        json.containsKey('author_name') ||
+        json.containsKey('cover_i') ||
+        json.containsKey('first_publish_year') ||
+        (json['key'] != null && (json['key'] as String).startsWith('/works/'));
+
+    if (isOpenLibrary) {
+      return Books(
+        id: json['key'] ?? '',
+        title: json['title'] ?? 'Unknown title',
+        author:
+            (json['author_name'] is List &&
+                (json['author_name'] as List).isNotEmpty)
+            ? (json['author_name'][0]?.toString() ?? 'Unknown author')
+            : 'Unknown author',
+        year: parseInt(json['first_publish_year']) ?? 0,
+        genre: '',
+        tropes: [],
+        coverId: parseInt(json['cover_i']),
+        workKey: json['key'] ?? '',
+        description: json['description'] is String
+            ? json['description']
+            : (json['description'] is Map
+                  ? (json['description']['value'] as String?)
+                  : null),
+      );
+    }
+
     return Books(
-      id: json['key'] ?? '',
-      title: json['title'] ?? 'Unknown title',
-      author: (json['author_name'] != null && json['author_name'].isNotEmpty)
-          ? json['author_name'][0]
-          : 'Unknown author',
-      year: (json['first_publish_year'] ?? 0),
-      genre: '', // OpenLibrary ger inte detta direkt
-      tropes: [],
-      coverId: json['cover_i'],
-      workKey: json['key'] ?? '',
+      id: json['id'] ?? '',
+      title: json['title'] ?? '',
+      author: json['author'] ?? 'Unknown author',
+      year: parseInt(json['year']) ?? 0,
+      genre: json['genre'] ?? '',
+      tropes:
+          (json['tropes'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      coverId: parseInt(json['coverId']),
+      workKey: json['workKey'] ?? '',
+      description: json['description']?.toString(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'year': year,
+      'genre': genre,
+      'tropes': tropes,
+      'coverId': coverId,
+      'workKey': workKey,
+      'description': description,
+    };
   }
 }

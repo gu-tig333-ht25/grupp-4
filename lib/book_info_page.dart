@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'user_provider.dart';
+import 'package:provider/provider.dart';
 
 class BookPage extends StatelessWidget {
   final Books book;
@@ -66,7 +68,18 @@ class BookPage extends StatelessWidget {
                           SizedBox(
                             width: constraints.maxWidth,
                             child: FloatingActionButton.extended(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final userProvider = context
+                                    .read<UserProvider>();
+                                await userProvider.addBookToWantToRead(book);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '"${book.title}" added to Want to Read',
+                                    ),
+                                  ),
+                                );
+                              },
                               label: Text('Want to read'),
                               heroTag: "wantToRead",
                             ),
@@ -75,7 +88,18 @@ class BookPage extends StatelessWidget {
                           SizedBox(
                             width: constraints.maxWidth,
                             child: FloatingActionButton.extended(
-                              onPressed: () {},
+                              onPressed: () async {
+                                final userProvider = context
+                                    .read<UserProvider>();
+                                await userProvider.addBookToHaveRead(book);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '"${book.title}" added to Have Read',
+                                    ),
+                                  ),
+                                );
+                              },
                               label: Text('Have read'),
                               heroTag: "haveRead",
                             ),
