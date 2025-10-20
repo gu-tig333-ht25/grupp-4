@@ -118,7 +118,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               Container(
                                 width: 60,
                                 height: 100,
-                                color: Colors.grey[300],
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(book.coverUrl),
+                                  ),
+                                ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(

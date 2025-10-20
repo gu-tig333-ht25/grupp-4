@@ -71,7 +71,7 @@ class BookPage extends StatelessWidget {
                               onPressed: () async {
                                 final userProvider = context
                                     .read<UserProvider>();
-                                await userProvider.addBookToWantToRead(book.id);
+                                await userProvider.addBookToWantToRead(book);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -91,7 +91,7 @@ class BookPage extends StatelessWidget {
                               onPressed: () async {
                                 final userProvider = context
                                     .read<UserProvider>();
-                                await userProvider.addBookToHaveRead(book.id);
+                                await userProvider.addBookToHaveRead(book);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(

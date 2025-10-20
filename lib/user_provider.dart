@@ -31,8 +31,8 @@ Future<void> testUserData(User user) async {
     await db.set({
       "name": "Wilma Test",
       "email": user.email,
-      "wantToRead": ["book_001", "book_002"],
-      "haveRead": ["book_003"],
+      "wantToRead": [],
+      "haveRead": [],
     });
 
     final snapshot = await db.get();
@@ -64,7 +64,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   // --- Lägg till bok i WantToRead ---
-  Future<void> addBookToWantToRead(String bookId) async {
+  Future<void> addBookToWantToRead(Books book) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
@@ -74,17 +74,17 @@ class UserProvider extends ChangeNotifier {
     if (snapshot.exists) {
       currentList = List.from(snapshot.value as List);
     }
-    if (!currentList.contains(bookId)) {
-      currentList.add(bookId);
+    if (!currentList.contains(book)) {
+      currentList.add(book);
       await dbRef.set(currentList);
       // Uppdatera lokalt
-      wantToRead.add(Books(id: bookId, title: bookId));
+      wantToRead.add(book);
       notifyListeners();
     }
   }
 
   // --- Lägg till bok i HaveRead ---
-  Future<void> addBookToHaveRead(String bookId) async {
+  Future<void> addBookToHaveRead(Books book) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
@@ -94,11 +94,11 @@ class UserProvider extends ChangeNotifier {
     if (snapshot.exists) {
       currentList = List.from(snapshot.value as List);
     }
-    if (!currentList.contains(bookId)) {
-      currentList.add(bookId);
+    if (!currentList.contains(book)) {
+      currentList.add(book);
       await dbRef.set(currentList);
       // Uppdatera lokalt
-      haveRead.add(Books(id: bookId, title: bookId));
+      haveRead.add(book);
       notifyListeners();
     }
   }
