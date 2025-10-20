@@ -1,27 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp((MyApp()));
-}
-
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Book app',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 24, 44, 21)),
-        useMaterial3: true,
-      ),
-      home: LoginPage(),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget{
+class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   final TextEditingController usernameController = TextEditingController();
@@ -29,55 +8,85 @@ class LoginPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 29, 63, 30),
-        title: Text("Login : Sign Up"),
+        title: const Text(
+          "Appnamn",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         centerTitle: true,
       ),
-     body: Padding(
+      body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Username
             TextField(
               controller: usernameController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Username',
-                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.person),
+                filled: true,
+                fillColor: colorScheme.primaryContainer.withAlpha(20),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outline),
+                ),
               ),
             ),
             const SizedBox(height: 16),
 
+            // Password
             TextField(
               controller: passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
-                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.lock),
+                filled: true,
+                fillColor: colorScheme.primaryContainer.withAlpha(20),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outline),
+                ),
               ),
             ),
             const SizedBox(height: 24),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: const Text('Login'),
-            ),
-            const SizedBox(height: 12),
-
-            OutlinedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: const Text('Sign Up'),
+            // Login-knapp
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Din login-logik här
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.secondary,
+                  foregroundColor: colorScheme.onSecondary,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                ),
+                child: const Text(
+                  'Login',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ],
         ),
