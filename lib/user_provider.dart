@@ -94,14 +94,16 @@ class UserProvider extends ChangeNotifier {
 
     final dbRef = _db.child("users/${user.uid}/haveRead");
     final snapshot = await dbRef.get();
-    List currentList = [];
+    List<Map<String, dynamic>> currentList = [];
     if (snapshot.exists) {
-      currentList = List.from(snapshot.value as List);
+      final listFromDb = snapshot.value as List;
+      currentList = listFromDb
+          .map((item) => Map<String, dynamic>.from(item as Map))
+          .toList();
     }
-    if (!currentList.contains(book)) {
-      currentList.add(book);
+    if (!currentList.any((b) => b['id'] == book.id)) {
+      currentList.add(book.toJson());
       await dbRef.set(currentList);
-      // Uppdatera lokalt
       haveRead.add(book);
       notifyListeners();
     }
@@ -130,10 +132,14 @@ class UserProvider extends ChangeNotifier {
             : [];
 
         wantToRead = wantList.map((b) => Books.fromJson(b)).toList();
-        final haveIds = List<String>.from(data['haveRead'] ?? []);
 
-        // Vi mappar ID:n till Books med placeholder title (du kan senare hämta full info från API)
-        haveRead = haveIds.map((id) => Books(id: id, title: id)).toList();
+        final haveReadList = data['haveRead'] != null
+            ? (data['haveRead'] as List)
+                  .map((item) => Map<String, dynamic>.from(item as Map))
+                  .toList()
+            : [];
+
+        haveRead = haveReadList.map((b) => Books.fromJson(b)).toList();
       }
 
       isLoading = false;
