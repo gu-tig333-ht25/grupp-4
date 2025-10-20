@@ -149,6 +149,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ],
                                 ),
                               ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                iconSize: 30,
+                                color: colorScheme.secondary,
+                                onPressed: () {
+                                  //Lägg till funktionalitet!
+                                },
+                              ),
                             ],
                           ),
                         ),
