@@ -71,4 +71,18 @@ class Books {
       workKey: json['key'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'year': year,
+      'genre': genre,
+      'tropes': tropes,
+      'coverId': coverId,
+      'workKey': workKey,
+      'description': description,
+    };
+  }
 }
