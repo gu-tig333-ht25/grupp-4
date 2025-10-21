@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'model.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -29,7 +31,7 @@ class LoginPage extends StatelessWidget {
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Email',
                 prefixIcon: const Icon(Icons.person),
                 filled: true,
                 fillColor: colorScheme.primaryContainer.withAlpha(20),
@@ -70,8 +72,36 @@ class LoginPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Din login-logik här
+                onPressed: () async {
+                  final email = usernameController.text.trim();
+                  final password = passwordController.text;
+                  if (email.isEmpty || password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Enter email and password')),
+                    );
+                    return;
+                  }
+                  try {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+                    // Navigate to main/root page
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const RootPage()),
+                      );
+                    }
+                  } on FirebaseAuthException catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.message ?? 'Login failed')),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('Error: $e')));
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.secondary,
