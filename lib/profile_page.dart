@@ -1,11 +1,11 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/user_provider.dart';
 import 'book_info_page.dart';
 import 'model.dart';
-import 'user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'login_page.dart';
+import 'app_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";
@@ -53,8 +53,44 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: colorScheme.error, // färg på texten (röd)
+                  backgroundColor: colorScheme
+                      .onError, // färg på bakgrund (kontrastfärg till röd)
+                  side: BorderSide(color: colorScheme.error), // röd kant
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                ),
                 onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
+                  try {
+                    await FirebaseAuth.instance.signOut();
+
+                    // Clear user data in provider via the provider method
+                    final up = context.read<UserProvider>();
+                    up.clearUserData();
+
+                    // Optional: reset bottom navigation to Home
+                    context.read<NavigationBottomBar>().setIndex(1);
+
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginPage()),
+                      );
+                    }
+                  } catch (e) {
+                    // Hantera logout error
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Logout failed: $e')),
+                      );
+                    }
+                  }
                 },
                 child: const Text("Log out"),
               ),
@@ -181,11 +217,12 @@ class _ProfilePageState extends State<ProfilePage> {
     return OutlinedButton(
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        backgroundColor: isSelected
-            ? colorScheme.primaryContainer
-            : Colors.white,
-        side: BorderSide(color: colorScheme.primary),
+        backgroundColor: Colors.grey[200],
+        side: BorderSide(
+          color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       ),
       child: Text(
         label,

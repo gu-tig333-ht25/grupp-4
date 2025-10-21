@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'model.dart';
-import 'api_getbooks.dart';
 
 /// Logga in automatiskt med testkonto
 Future<User?> loginTestUser() async {
@@ -149,6 +148,16 @@ class UserProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  // Clear local user data and notify listeners (call this on logout)
+  void clearUserData() {
+    username = '';
+    email = '';
+    wantToRead.clear();
+    haveRead.clear();
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<void> removeBook(Books book, int selectedList) async {
