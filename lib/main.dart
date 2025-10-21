@@ -9,6 +9,7 @@ import 'api_getbooks.dart';
 import 'user_provider.dart';
 import 'login_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'tag_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => BookProvider()),
         ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
+        ChangeNotifierProvider(create: (_) => TagProvider()),
       ],
       child: MaterialApp(
         title: 'BookApp',

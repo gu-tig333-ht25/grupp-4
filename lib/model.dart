@@ -108,6 +108,28 @@ class Books {
     );
   }
 
+  /// copyWith för att enkelt uppdatera vissa fält
+  Books copyWith({
+    String? title,
+    String? author,
+    int? year,
+    String? genre,
+    List<String>? tropes,
+    int? coverId,
+    String? workKey,
+  }) {
+    return Books(
+      id: id,
+      title: title ?? this.title,
+      author: author ?? this.author,
+      year: year ?? this.year,
+      genre: genre ?? this.genre,
+      tropes: tropes ?? this.tropes,
+      coverId: coverId ?? this.coverId,
+      workKey: workKey ?? this.workKey,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

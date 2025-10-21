@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'book_info_page.dart';
 import 'api_getbooks.dart';
 import 'model.dart';
+import 'tag_provider.dart'; // 👈 NY — importera din provider
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -38,11 +39,17 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final bookProvider = context.watch<BookProvider>();
+    final tagProvider = context.watch<TagProvider>(); // 👈 NY
+
+    // Visa laddningssnurra om taggarna inte hunnit laddas från Firebase
+    if (tagProvider.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'NAMN + LOGGA',
+          'BookApp',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: colorScheme.primary,
@@ -52,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Sökfält
+            // --- Sökfält ---
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
@@ -79,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
 
-            // Populära taggar
+            // --- Populära taggar ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -100,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
                       spacing: 8,
                       runSpacing: 5,
                       children: [
-                        for (final tag in globalPopular)
+                        for (final tag in tagProvider.popularTags)
                           _SelectableTagChip(
                             label: tag,
                             selectedTags: selectedTags,
@@ -117,7 +124,7 @@ class _SearchPageState extends State<SearchPage> {
 
             const SizedBox(height: 16),
 
-            // Filter-sektion
+            // --- Filter-sektion (Genres & Tropes) ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -143,7 +150,7 @@ class _SearchPageState extends State<SearchPage> {
                             spacing: 8,
                             runSpacing: 8,
                             children: [
-                              for (final genre in globalGenres)
+                              for (final genre in tagProvider.genres)
                                 _SelectableTagChip(
                                   label: genre,
                                   selectedTags: selectedTags,
@@ -176,7 +183,7 @@ class _SearchPageState extends State<SearchPage> {
                             spacing: 8,
                             runSpacing: 8,
                             children: [
-                              for (final trope in globalTropes)
+                              for (final trope in tagProvider.tropes)
                                 _SelectableTagChip(
                                   label: trope,
                                   selectedTags: selectedTags,
@@ -192,9 +199,10 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
+
             const SizedBox(height: 16),
 
-            // Search-knapp
+            // --- Sökknapp ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
@@ -216,7 +224,7 @@ class _SearchPageState extends State<SearchPage> {
 
             const SizedBox(height: 16),
 
-            // Boklista scrollbar
+            // --- Resultatlista ---
             Builder(
               builder: (context) {
                 if (bookProvider.isLoading) {
@@ -228,10 +236,8 @@ class _SearchPageState extends State<SearchPage> {
                 }
 
                 return ListView.builder(
-                  physics:
-                      NeverScrollableScrollPhysics(), // disable scroll på listan
-                  shrinkWrap:
-                      true, // gör så listan tar så lite plats som möjligt
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: bookProvider.books.length,
                   itemBuilder: (context, index) {
@@ -240,7 +246,6 @@ class _SearchPageState extends State<SearchPage> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: OutlinedButton(
                         onPressed: () {
-                          final book = bookProvider.books[index];
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -323,7 +328,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-// --- Komponent ---
+// --- Komponent: väljbar tag ---
 class _SelectableTagChip extends StatelessWidget {
   final String label;
   final Set<String> selectedTags;
@@ -346,12 +351,12 @@ class _SelectableTagChip extends StatelessWidget {
     final background = usePopularStyle
         ? colorScheme.secondaryContainer.withAlpha(50)
         : colorScheme.surfaceContainerHighest;
-    final selectedColor = usePopularStyle
-        ? colorScheme.secondaryContainer
-        : colorScheme.secondaryContainer;
-    final borderColor = usePopularStyle
+    final selectedColor = colorScheme.secondaryContainer;
+    final borderColor = isSelected
         ? colorScheme.secondary
-        : (isSelected ? colorScheme.secondary : colorScheme.outlineVariant);
+        : (usePopularStyle
+              ? colorScheme.secondary
+              : colorScheme.outlineVariant);
 
     return ChoiceChip(
       label: Text(label),
