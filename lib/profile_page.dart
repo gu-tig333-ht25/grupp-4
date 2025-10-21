@@ -149,6 +149,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ],
                                 ),
                               ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                iconSize: 30,
+                                color: colorScheme.secondary,
+                                onPressed: () async {
+                                  await userProvider.removeBook(
+                                    book,
+                                    selectedTab,
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),

@@ -150,4 +150,41 @@ class UserProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> removeBook(Books book, int selectedList) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    try {
+      // 0 = wantToRead, 1 = haveRead
+      final listName = selectedList == 0 ? "wantToRead" : "haveRead";
+      final dbRef = _db.child("users/${user.uid}/$listName");
+
+      final snapshot = await dbRef.get();
+      if (!snapshot.exists) return;
+
+      final listFromDb = snapshot.value as List;
+      final currentList = listFromDb
+          .whereType<Map>() // säkerställ att bara Maps hanteras
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+
+      // Filtrera bort boken med samma id
+      final updatedList = currentList.where((b) => b['id'] != book.id).toList();
+
+      // Uppdatera databasen
+      await dbRef.set(updatedList);
+
+      // Uppdatera den lokala listan
+      if (selectedList == 0) {
+        wantToRead.removeWhere((b) => b.id == book.id);
+      } else {
+        haveRead.removeWhere((b) => b.id == book.id);
+      }
+
+      notifyListeners();
+    } catch (e) {
+      print("Fel vid removeBook: $e");
+    }
+  }
 }
