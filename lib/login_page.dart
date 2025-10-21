@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'user_provider.dart';
 import 'model.dart';
 
 class LoginPage extends StatelessWidget {
@@ -86,7 +88,10 @@ class LoginPage extends StatelessWidget {
                       email: email,
                       password: password,
                     );
-                    // Navigate to main/root page
+
+                    // Load user data into provider after sign-in
+                    await context.read<UserProvider>().loadUserData();
+
                     if (context.mounted) {
                       Navigator.pushReplacement(
                         context,

@@ -6,6 +6,7 @@ import 'book_info_page.dart';
 import 'model.dart';
 import 'user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'login_page.dart'; // added
 
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";
@@ -54,7 +55,31 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               OutlinedButton(
                 onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
+                  try {
+                    await FirebaseAuth.instance.signOut();
+
+                    // Clear local user data so profile shows empty after logout
+                    final up = context.read<UserProvider>();
+                    up.wantToRead.clear();
+                    up.haveRead.clear();
+                    up.username = '';
+                    up.email = '';
+                    up.notifyListeners();
+
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginPage()),
+                      );
+                    }
+                  } catch (e) {
+                    // optional: show error
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Logout failed: $e')),
+                      );
+                    }
+                  }
                 },
                 child: const Text("Log out"),
               ),
