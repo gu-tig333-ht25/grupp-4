@@ -122,3 +122,28 @@ class Books {
     };
   }
 }
+
+List<String> globalGenres = [
+  "Fantasy",
+  "Romance",
+  "Science Fiction",
+  "Mystery",
+  "Historical Fiction",
+];
+
+List<String> globalTropes = [
+  "Enemies to Lovers",
+  "Found Family",
+  "Chosen One",
+  "Secret Identity",
+  "Redemption Arc",
+  "Forbidden Love",
+];
+
+List<String> globalPopular = [
+  "Fantasy",
+  "Enemies to Lovers",
+  "Science Fiction",
+  "Secret Identity",
+  "Romance",
+];

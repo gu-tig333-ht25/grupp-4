@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/sample_books.dart';
 import 'model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,12 @@ class BookPage extends StatelessWidget {
                         Text('Title: ${book.title}'),
                         Text('Author: ${book.author}'),
                         Text('Published: ${book.year}'),
+                        TextButton(
+                          onPressed: () {
+                            updateBookGenre(book, globalGenres[1]);
+                          },
+                          child: Text('testgenre'),
+                        ),
                       ],
                     ),
                   ),
