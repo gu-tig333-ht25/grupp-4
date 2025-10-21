@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'user_provider.dart';
 import 'model.dart';
+import 'app_provider.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -70,7 +71,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Login-knapp
+            // Login knapp
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -89,8 +90,10 @@ class LoginPage extends StatelessWidget {
                       password: password,
                     );
 
-                    // Load user data into provider after sign-in
+                    // Ensure provider loads user data
                     await context.read<UserProvider>().loadUserData();
+                    // Set bottom navigation to home page
+                    context.read<NavigationBottomBar>().setIndex(1);
 
                     if (context.mounted) {
                       Navigator.pushReplacement(
