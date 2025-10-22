@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'user_provider.dart';
 import 'package:provider/provider.dart';
+import 'api_getbooks.dart';
 
 class BookPage extends StatelessWidget {
   final Books book;
@@ -115,7 +116,20 @@ class BookPage extends StatelessWidget {
             Wrap(
               runSpacing: 8,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text('Fantasy')),
+                ElevatedButton(
+                  onPressed: () async {
+                    final bookProvider = context.read<BookProvider>();
+                    await bookProvider.saveBookToFirebase(
+                      book,
+                    ); // bok måste finnas innan man kan uppdatera!
+                    await bookProvider.updateBookGenreAndTropes(
+                      book.id,
+                      "Romance",
+                      ["Fluff", "Friends-to-lovers"],
+                    );
+                  },
+                  child: Text('test'),
+                ),
                 ElevatedButton(onPressed: () {}, child: Text('Romance')),
                 ElevatedButton(onPressed: () {}, child: Text('Space')),
                 ElevatedButton(onPressed: () {}, child: Text('Space')),
