@@ -162,7 +162,6 @@ class _SearchPageState extends State<SearchPage> {
                     leading: const Icon(Icons.favorite),
                     textColor: colorScheme.primary,
                     iconColor: colorScheme.primary,
-
                     onExpansionChanged: (expanded) {
                       setState(() => showTropes = expanded);
                     },
