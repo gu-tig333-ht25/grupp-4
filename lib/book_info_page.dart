@@ -12,6 +12,9 @@ class BookPage extends StatelessWidget {
   const BookPage({super.key, required this.book});
   @override
   Widget build(BuildContext context) {
+    final bookProvider = context.watch<BookProvider>();
+    final updatedBook = bookProvider.getBookById(book.id) ?? book;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -39,7 +42,7 @@ class BookPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(book.coverUrl),
+                      image: NetworkImage(updatedBook.coverUrl),
                     ),
                   ),
                 ),
@@ -52,9 +55,11 @@ class BookPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Title: ${book.title}'),
-                        Text('Author: ${book.author}'),
-                        Text('Published: ${book.year}'),
+                        Text('Title: ${updatedBook.title}'),
+                        Text('Author: ${updatedBook.author}'),
+                        Text('Published: ${updatedBook.year}'),
+                        Text('Genre: ${updatedBook.genre}'),
+                        Text('Tropes: ${updatedBook.tropes.join(", ")}'),
                       ],
                     ),
                   ),

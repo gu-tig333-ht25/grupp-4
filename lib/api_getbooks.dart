@@ -159,6 +159,8 @@ class BookProvider extends ChangeNotifier {
       book.tropes = newTropes;
 
       await saveBookToFirebase(book);
+      notifyListeners();
+
       print("Uppdaterade genre/tropes för ${book.title}");
     } catch (e) {
       print("Fel vid updateBookGenreAndTropes: $e");
@@ -185,6 +187,14 @@ class BookProvider extends ChangeNotifier {
     } catch (e) {
       print("Fel vid loadAllBooksFromFirebase: $e");
       return [];
+    }
+  }
+
+  Books? getBookById(String id) {
+    try {
+      return _books.firstWhere((b) => b.id == id);
+    } catch (_) {
+      return null;
     }
   }
 }
