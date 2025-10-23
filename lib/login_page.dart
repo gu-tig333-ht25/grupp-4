@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Username
+            // Email
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
@@ -71,41 +71,48 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Login knapp
+            // Login-knapp
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
                   final email = usernameController.text.trim();
                   final password = passwordController.text;
+
                   if (email.isEmpty || password.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Enter email and password')),
                     );
                     return;
                   }
+
                   try {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: email,
                       password: password,
                     );
 
-                    // Ensure provider loads user data
+                    if (!context.mounted) return;
+
                     await context.read<UserProvider>().loadUserData();
-                    // Set bottom navigation to home page
+
+                    if (!context.mounted) return;
+
                     context.read<NavigationBottomBar>().setIndex(1);
 
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const RootPage()),
-                      );
-                    }
+                    if (!context.mounted) return;
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const RootPage()),
+                    );
                   } on FirebaseAuthException catch (e) {
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(e.message ?? 'Login failed')),
                     );
                   } catch (e) {
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(SnackBar(content: Text('Error: $e')));
