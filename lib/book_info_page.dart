@@ -156,9 +156,10 @@ class BookPage extends StatelessWidget {
                 ),
                 SizedBox(height: 30, child: Text('Tags:')),
                 Wrap(
+                  spacing: 8,
                   runSpacing: 8,
                   children: [
-                    ElevatedButton(
+                    OutlinedButton(
                       onPressed: () async {
                         final bookProvider = context.read<BookProvider>();
                         await bookProvider.saveBookToFirebase(book);
@@ -168,13 +169,111 @@ class BookPage extends StatelessWidget {
                           ["Fluff", "Friends-to-lovers"],
                         );
                       },
-                      child: Text('test'),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondaryContainer.withAlpha(50),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                      ),
+                      child: Text(
+                        'Test',
+                        style: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSecondaryContainer,
+                        ),
+                      ),
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text('Romance')),
-                    ElevatedButton(onPressed: () {}, child: Text('Space')),
-                    ElevatedButton(onPressed: () {}, child: Text('Space')),
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondaryContainer.withAlpha(50),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                      ),
+                      child: Text(
+                        '${updatedBook.genre}',
+                        style: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondaryContainer.withAlpha(50),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                      ),
+                      child: Text(
+                        '${updatedBook.tropes[0]}',
+                        style: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondaryContainer.withAlpha(50),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                      ),
+                      child: Text(
+                        '${updatedBook.tropes[1]}',
+                        style: TextStyle(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
+
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.all(10),

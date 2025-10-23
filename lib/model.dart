@@ -122,3 +122,24 @@ class Books {
     };
   }
 }
+
+List<String> listGenre = [
+  "Fantasy",
+  "Science-Fiction",
+  "Romance",
+  "Historical Fiction",
+  "Horror",
+  "Comedy",
+  "Dystopian",
+];
+List<String> listTropes = [
+  'Friends to lovers',
+  'Enemies to lovers',
+  'HEA',
+  'Politics',
+  'Chosen one',
+  'Found family',
+  'Fluff',
+  'Angst',
+];
+List<String> listPopular = ['Friends to lovers', "Fantasy", "Dystopian"];
