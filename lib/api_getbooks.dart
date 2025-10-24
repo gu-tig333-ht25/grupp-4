@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
 import 'model.dart';
-
 
 class BookProvider extends ChangeNotifier {
   final List<Books> _books = [];
   List<Books> get books => _books;
   bool isLoading = false;
+
+  final DatabaseReference _db = FirebaseDatabase.instance.ref();
 
   Future<void> fetchBooks(String query) async {
     if (query.isEmpty) return;
@@ -18,13 +20,11 @@ class BookProvider extends ChangeNotifier {
     try {
       final url = Uri.parse('https://openlibrary.org/search.json?q=$query');
       final response = await http.get(
-      url,
-      headers: {
-        'User-Agent': 'SchoolProjectBookApp/1.0 (10benny10ben10@gmail.com)',
-      },
-    );
-
-  
+        url,
+        headers: {
+          'User-Agent': 'SchoolProjectBookApp/1.0 (10benny10ben10@gmail.com)',
+        },
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -50,5 +50,165 @@ class BookProvider extends ChangeNotifier {
   void clearBooks() {
     _books.clear();
     notifyListeners();
+  }
+
+  Future<void> saveBookToFirebase(Books book) async {
+    try {
+      final dbRef = _db.child("books").child(book.id); // egen nod per bok
+
+      // Hämta befintlig bok från Firebase
+      final snapshot = await dbRef.get();
+      if (snapshot.exists) {
+        final existingData = Map<String, dynamic>.from(snapshot.value as Map);
+        final existingBook = Books.fromJson(existingData);
+
+        // Behåll genre och tropes om de redan finns
+        if (existingBook.genre.isNotEmpty) {
+          book.genre = existingBook.genre;
+        }
+        if (existingBook.tropes.isNotEmpty) {
+          book.tropes = existingBook.tropes;
+        }
+      }
+
+      // Spara bok till Firebase
+      await dbRef.set(book.toJson());
+
+      // Uppdatera lokalt
+      final localIndex = _books.indexWhere((b) => b.id == book.id);
+      if (localIndex != -1) {
+        _books[localIndex] = book;
+      } else {
+        _books.add(book);
+      }
+
+      notifyListeners();
+      print("Bok sparad till Firebase: ${book.title}");
+    } catch (e) {
+      print("Fel vid saveBookToFirebase: $e");
+    }
+  }
+
+  Future<Books?> getBookFromFirebase(String bookId) async {
+    try {
+      final snapshot = await _db.child("books/works").child(bookId).get();
+      if (!snapshot.exists) {
+        print("Ingen bok hittades i Firebase för id: $bookId");
+        return null;
+      }
+
+      final bookData = Map<String, dynamic>.from(snapshot.value as Map);
+      return Books.fromJson(bookData);
+    } catch (e) {
+      print("Fel vid getBookFromFirebase: $e");
+      return null;
+    }
+  }
+
+  Future<void> updateBookGenreAndTropes(
+    String bookId,
+    String newGenre,
+    List<String> newTropes,
+  ) async {
+    try {
+      final book = await getBookFromFirebase(bookId);
+      if (book == null) {
+        print("Kunde inte hitta bok att uppdatera: $bookId");
+        return;
+      }
+
+      book.genre = newGenre;
+      book.tropes = newTropes;
+
+      await saveBookToFirebase(book);
+      notifyListeners();
+
+      print("Uppdaterade genre/tropes för ${book.title}");
+    } catch (e) {
+      print("Fel vid updateBookGenreAndTropes: $e");
+    }
+  }
+
+  Future<List<Books>> loadAllBooksFromFirebase() async {
+    try {
+      final snapshot = await _db.child("books/works").get();
+      if (!snapshot.exists) return [];
+      final Map<String, dynamic> booksMap = Map<String, dynamic>.from(
+        snapshot.value as Map,
+      );
+
+      final allBooks = booksMap.entries
+          .map(
+            (entry) => Books.fromJson(Map<String, dynamic>.from(entry.value)),
+          )
+          .toList();
+
+      print("Hämtade ${allBooks.length} böcker från Firebase");
+      return allBooks;
+    } catch (e) {
+      print("Fel vid loadAllBooksFromFirebase: $e");
+      return [];
+    }
+  }
+
+  Books? getBookById(String id) {
+    try {
+      return _books.firstWhere((b) => b.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<Books> getOrCreateBook(Books book) async {
+    final existing = await getBookFromFirebase(book.id);
+    if (existing != null) return existing;
+    await saveBookToFirebase(book);
+    return book;
+  }
+
+  Future<List<Books>> searchBooksByTags(Set<String> selectedTags) async {
+    if (selectedTags.isEmpty) return [];
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final snapshot = await _db.child("books/works").get();
+      if (!snapshot.exists) {
+        isLoading = false;
+        notifyListeners();
+        return [];
+      }
+
+      final booksMap = Map<String, dynamic>.from(snapshot.value as Map);
+
+      final matchingBooks = booksMap.entries
+          .map(
+            (entry) => Books.fromJson(Map<String, dynamic>.from(entry.value)),
+          )
+          .where((book) {
+            final genreMatch = selectedTags.contains(book.genre);
+            final tropeMatch = book.tropes.any((t) => selectedTags.contains(t));
+            return genreMatch || tropeMatch;
+          })
+          .toList();
+
+      _books
+        ..clear()
+        ..addAll(matchingBooks);
+
+      print(
+        "Hittade ${matchingBooks.length} böcker som matchar ${selectedTags.join(', ')}",
+      );
+
+      isLoading = false;
+      notifyListeners();
+      return matchingBooks;
+    } catch (e) {
+      print("Fel vid sökning i Firebase: $e");
+      isLoading = false;
+      notifyListeners();
+      return [];
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'book_info_page.dart';
 import 'api_getbooks.dart';
+import 'model.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -99,17 +100,7 @@ class _SearchPageState extends State<SearchPage> {
                       spacing: 8,
                       runSpacing: 5,
                       children: [
-                        for (final tag in [
-                          'Romance',
-                          'Fluff',
-                          'Angst',
-                          'Enemies to lovers',
-                          'Fantasy',
-                          'Sci-fi',
-                          'Friends to lovers',
-                          'Slow burn',
-                          'Historical fiction',
-                        ])
+                        for (final tag in listPopular)
                           _SelectableTagChip(
                             label: tag,
                             selectedTags: selectedTags,
@@ -152,12 +143,13 @@ class _SearchPageState extends State<SearchPage> {
                             spacing: 8,
                             runSpacing: 8,
                             children: [
-                              for (final genre in ['Romance', 'Fantasy'])
+                              for (final genre in listGenre)
                                 _SelectableTagChip(
                                   label: genre,
                                   selectedTags: selectedTags,
                                   onSelected: _toggleTag,
                                   colorScheme: colorScheme,
+                                  usePopularStyle: true,
                                 ),
                             ],
                           ),
@@ -185,12 +177,13 @@ class _SearchPageState extends State<SearchPage> {
                             spacing: 8,
                             runSpacing: 8,
                             children: [
-                              for (final trope in ['Angst', 'Fluff'])
+                              for (final trope in listTropes)
                                 _SelectableTagChip(
                                   label: trope,
                                   selectedTags: selectedTags,
                                   onSelected: _toggleTag,
                                   colorScheme: colorScheme,
+                                  usePopularStyle: true,
                                 ),
                             ],
                           ),
@@ -204,12 +197,23 @@ class _SearchPageState extends State<SearchPage> {
             const SizedBox(height: 16),
 
             // Search-knapp
+            // Search-knapp
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => _searchBooks(context),
+                  onPressed: () async {
+                    final bookProvider = context.read<BookProvider>();
+
+                    if (selectedTags.isNotEmpty) {
+                      await bookProvider.searchBooksByTags(selectedTags);
+                    } else {
+                      _searchBooks(
+                        context,
+                      ); // fallback till titel/author-sökning
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.secondary,
                     foregroundColor: colorScheme.onSecondary,

@@ -13,9 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<String> authors = [
-    "Colleen Hoover",
-    "Ali Hazelwood",
-    "Brandon Sanderson",
+    "Julia Quinn",
+    "Suzanne Collins",
+    "Lars Kepler",
   ];
 
   Map<String, List<Books>> booksByAuthor = {};
@@ -74,11 +74,11 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          bookGenreListHorizontal(booksByAuthor["Colleen Hoover"] ?? []),
+          bookGenreListHorizontal(booksByAuthor["Julia Quinn"] ?? []),
           SizedBox(height: 20),
-          bookGenreListHorizontal(booksByAuthor["Ali Hazelwood"] ?? []),
+          bookGenreListHorizontal(booksByAuthor["Suzanne Collins"] ?? []),
           SizedBox(height: 20),
-          bookGenreListHorizontal(booksByAuthor["Brandon Sanderson"] ?? []),
+          bookGenreListHorizontal(booksByAuthor["Lars Kepler"] ?? []),
         ],
       ),
     );
