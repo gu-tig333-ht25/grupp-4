@@ -131,6 +131,7 @@ List<String> listGenre = [
   "Horror",
   "Comedy",
   "Dystopian",
+  "Crime Fiction",
 ];
 List<String> listTropes = [
   'Friends to lovers',
@@ -142,5 +143,8 @@ List<String> listTropes = [
   'Fluff',
   'Angst',
   'Friendship',
+  'Murder',
+  'Police',
+  'Kidnapping',
 ];
 List<String> listPopular = ['Friends to lovers', "Fantasy", "Dystopian"];
