@@ -141,5 +141,6 @@ List<String> listTropes = [
   'Found family',
   'Fluff',
   'Angst',
+  'Friendship',
 ];
 List<String> listPopular = ['Friends to lovers', "Fantasy", "Dystopian"];

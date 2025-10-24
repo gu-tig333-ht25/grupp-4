@@ -93,8 +93,6 @@ class BookPage extends StatelessWidget {
                             Text('Title: ${updatedBook.title}'),
                             Text('Author: ${updatedBook.author}'),
                             Text('Published: ${updatedBook.year}'),
-                            Text('Genre: ${updatedBook.genre}'),
-                            Text('Tropes: ${updatedBook.tropes.join(", ")}'),
                           ],
                         ),
                       ),
