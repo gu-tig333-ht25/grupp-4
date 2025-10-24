@@ -170,44 +170,16 @@ class BookPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 30, child: Text('Tags:')),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+                SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //Visa genreknappen (om den finns)
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.secondaryContainer.withAlpha(50),
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                      ),
-                      child: Text(
-                        updatedBook.genre.isNotEmpty
-                            ? updatedBook.genre
-                            : "No genre",
-                        style: TextStyle(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                    ),
-
-                    //Visa tropes dynamiskt (om det finns några)
-                    if (updatedBook.tropes.isNotEmpty)
-                      for (final trope in updatedBook.tropes)
+                    // GENRE RAD
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Genre: '),
+                        SizedBox(width: 6),
                         OutlinedButton(
                           onPressed: () {},
                           style: OutlinedButton.styleFrom(
@@ -226,7 +198,9 @@ class BookPage extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            trope,
+                            updatedBook.genre.isNotEmpty
+                                ? updatedBook.genre
+                                : "No genre",
                             style: TextStyle(
                               color: Theme.of(
                                 context,
@@ -234,35 +208,91 @@ class BookPage extends StatelessWidget {
                             ),
                           ),
                         ),
-
-                    //Visa fallback om inga tropes finns alls
-                    if (updatedBook.tropes.isEmpty)
-                      OutlinedButton(
-                        onPressed: null,
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.secondaryContainer.withAlpha(50),
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    // TROPES RAD
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Tropes: '),
+                        SizedBox(width: 6),
+                        Expanded(
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: updatedBook.tropes.isNotEmpty
+                                ? updatedBook.tropes
+                                      .map(
+                                        (trope) => OutlinedButton(
+                                          onPressed: () {},
+                                          style: OutlinedButton.styleFrom(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer
+                                                .withAlpha(50),
+                                            side: BorderSide(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.secondary,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 10,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            trope,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList()
+                                : [
+                                    OutlinedButton(
+                                      onPressed: null,
+                                      style: OutlinedButton.styleFrom(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer
+                                            .withAlpha(50),
+                                        side: BorderSide(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 10,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "No tropes",
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSecondaryContainer,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                           ),
                         ),
-                        child: Text(
-                          "No tropes",
-                          style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSecondaryContainer,
-                          ),
-                        ),
-                      ),
+                      ],
+                    ),
                   ],
                 ),
 
