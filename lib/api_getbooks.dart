@@ -54,7 +54,7 @@ class BookProvider extends ChangeNotifier {
 
   Future<void> saveBookToFirebase(Books book) async {
     try {
-      final dbRef = _db.child("books/works").child(book.id); // egen nod per bok
+      final dbRef = _db.child("books").child(book.id); // egen nod per bok
       await dbRef.set(book.toJson());
 
       // Uppdatera lokalt
