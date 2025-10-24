@@ -197,12 +197,23 @@ class _SearchPageState extends State<SearchPage> {
             const SizedBox(height: 16),
 
             // Search-knapp
+            // Search-knapp
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => _searchBooks(context),
+                  onPressed: () async {
+                    final bookProvider = context.read<BookProvider>();
+
+                    if (selectedTags.isNotEmpty) {
+                      await bookProvider.searchBooksByTags(selectedTags);
+                    } else {
+                      _searchBooks(
+                        context,
+                      ); // fallback till titel/author-sökning
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.secondary,
                     foregroundColor: colorScheme.onSecondary,

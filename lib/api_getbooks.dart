@@ -54,7 +54,7 @@ class BookProvider extends ChangeNotifier {
 
   Future<void> saveBookToFirebase(Books book) async {
     try {
-      final dbRef = _db.child("books").child(book.id); // egen nod per bok
+      final dbRef = _db.child("books/works").child(book.id); // egen nod per bok
       await dbRef.set(book.toJson());
 
       // Uppdatera lokalt
@@ -74,7 +74,7 @@ class BookProvider extends ChangeNotifier {
 
   Future<Books?> getBookFromFirebase(String bookId) async {
     try {
-      final snapshot = await _db.child("books").child(bookId).get();
+      final snapshot = await _db.child("books/works").child(bookId).get();
       if (!snapshot.exists) {
         print("Ingen bok hittades i Firebase för id: $bookId");
         return null;
@@ -114,9 +114,8 @@ class BookProvider extends ChangeNotifier {
 
   Future<List<Books>> loadAllBooksFromFirebase() async {
     try {
-      final snapshot = await _db.child("books").get();
+      final snapshot = await _db.child("books/works").get();
       if (!snapshot.exists) return [];
-
       final Map<String, dynamic> booksMap = Map<String, dynamic>.from(
         snapshot.value as Map,
       );
@@ -148,5 +147,51 @@ class BookProvider extends ChangeNotifier {
     if (existing != null) return existing;
     await saveBookToFirebase(book);
     return book;
+  }
+
+  Future<List<Books>> searchBooksByTags(Set<String> selectedTags) async {
+    if (selectedTags.isEmpty) return [];
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final snapshot = await _db.child("books/works").get();
+      if (!snapshot.exists) {
+        isLoading = false;
+        notifyListeners();
+        return [];
+      }
+
+      final booksMap = Map<String, dynamic>.from(snapshot.value as Map);
+
+      final matchingBooks = booksMap.entries
+          .map(
+            (entry) => Books.fromJson(Map<String, dynamic>.from(entry.value)),
+          )
+          .where((book) {
+            final genreMatch = selectedTags.contains(book.genre);
+            final tropeMatch = book.tropes.any((t) => selectedTags.contains(t));
+            return genreMatch || tropeMatch;
+          })
+          .toList();
+
+      _books
+        ..clear()
+        ..addAll(matchingBooks);
+
+      print(
+        "Hittade ${matchingBooks.length} böcker som matchar ${selectedTags.join(', ')}",
+      );
+
+      isLoading = false;
+      notifyListeners();
+      return matchingBooks;
+    } catch (e) {
+      print("Fel vid sökning i Firebase: $e");
+      isLoading = false;
+      notifyListeners();
+      return [];
+    }
   }
 }
