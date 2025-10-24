@@ -53,16 +53,16 @@ class BookPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(
-                  image: AssetImage('assets/Orange-Book-Logo-scaled.jpg'),
-                  height: AppBar().preferredSize.height,
-                ),
-                Text('Bookapp'),
-              ],
+            iconTheme: IconThemeData(
+              color: Colors.white, // ← ändrar färg på tillbaka-pilen
             ),
+            title: Text('Bokapp'),
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+            centerTitle: true,
           ),
           body: Padding(
             padding: const EdgeInsets.all(5),
@@ -72,8 +72,8 @@ class BookPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 122,
-                      width: 80,
+                      height: 152,
+                      width: 110,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.cover,
@@ -82,7 +82,7 @@ class BookPage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: 122,
+                      height: 152,
                       width: 200,
                       margin: EdgeInsets.only(left: 5),
                       child: Padding(
@@ -91,7 +91,9 @@ class BookPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Title: ${updatedBook.title}'),
+                            SizedBox(height: 3),
                             Text('Author: ${updatedBook.author}'),
+                            SizedBox(height: 3),
                             Text('Published: ${updatedBook.year}'),
                           ],
                         ),
@@ -107,6 +109,14 @@ class BookPage extends StatelessWidget {
                               SizedBox(
                                 width: constraints.maxWidth,
                                 child: FloatingActionButton.extended(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.secondary, // färg på border
+                                    ),
+                                  ),
                                   onPressed: () async {
                                     final userProvider = context
                                         .read<UserProvider>();
@@ -129,6 +139,14 @@ class BookPage extends StatelessWidget {
                               SizedBox(
                                 width: constraints.maxWidth,
                                 child: FloatingActionButton.extended(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.secondary, // färg på border
+                                    ),
+                                  ),
                                   onPressed: () async {
                                     final userProvider = context
                                         .read<UserProvider>();
@@ -157,42 +175,6 @@ class BookPage extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    // Testknappen
-                    /*OutlinedButton(
-                      onPressed: () async {
-                        final bookProvider = context.read<BookProvider>();
-                        await bookProvider.saveBookToFirebase(book);
-                        await bookProvider.updateBookGenreAndTropes(
-                          book.id,
-                          "Romance",
-                          ["Fluff", "Friends-to-lovers"],
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.secondaryContainer.withAlpha(50),
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                      ),
-                      child: Text(
-                        'Test',
-                        style: TextStyle(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                    ),*/
-
                     //Visa genreknappen (om den finns)
                     OutlinedButton(
                       onPressed: () {},
@@ -289,7 +271,10 @@ class BookPage extends StatelessWidget {
                     margin: EdgeInsets.all(10),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: SingleChildScrollView(
                       child: FutureBuilder<String>(
