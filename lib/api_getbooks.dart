@@ -55,6 +55,23 @@ class BookProvider extends ChangeNotifier {
   Future<void> saveBookToFirebase(Books book) async {
     try {
       final dbRef = _db.child("books").child(book.id); // egen nod per bok
+
+      // Hämta befintlig bok från Firebase
+      final snapshot = await dbRef.get();
+      if (snapshot.exists) {
+        final existingData = Map<String, dynamic>.from(snapshot.value as Map);
+        final existingBook = Books.fromJson(existingData);
+
+        // Behåll genre och tropes om de redan finns
+        if (existingBook.genre.isNotEmpty) {
+          book.genre = existingBook.genre;
+        }
+        if (existingBook.tropes.isNotEmpty) {
+          book.tropes = existingBook.tropes;
+        }
+      }
+
+      // Spara bok till Firebase
       await dbRef.set(book.toJson());
 
       // Uppdatera lokalt
