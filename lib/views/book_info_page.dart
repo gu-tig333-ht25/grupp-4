@@ -1,33 +1,11 @@
 import 'package:flutter/material.dart';
-import 'model.dart';
+import '../models/book_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'user_provider.dart';
+import '../providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'api_getbooks.dart';
+import '../providers/book_provider.dart';
 
-// ------------------------------------------
-// Global funktion för beskrivning
-Future<String> fetchDescription(String workKey) async {
-  if (workKey.isEmpty) return "No description available";
-  final url = Uri.parse("https://openlibrary.org$workKey.json");
-  try {
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      if (data['description'] is String) {
-        return data['description'];
-      } else if (data['description']?['value'] != null) {
-        return data['description']['value'];
-      }
-    }
-  } catch (e) {
-    print("Error fetching description: $e");
-  }
-  return "No description available";
-}
-
-// ------------------------------------------
 class BookPage extends StatelessWidget {
   final Books book;
 
@@ -333,3 +311,26 @@ class BookPage extends StatelessWidget {
     );
   }
 }
+
+// ------------------------------------------
+// Global funktion för beskrivning
+Future<String> fetchDescription(String workKey) async {
+  if (workKey.isEmpty) return "No description available";
+  final url = Uri.parse("https://openlibrary.org$workKey.json");
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['description'] is String) {
+        return data['description'];
+      } else if (data['description']?['value'] != null) {
+        return data['description']['value'];
+      }
+    }
+  } catch (e) {
+    print("Error fetching description: $e");
+  }
+  return "No description available";
+}
+
+// ------------------------------------------

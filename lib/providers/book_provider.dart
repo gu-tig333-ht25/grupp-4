@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
-import 'model.dart';
+import '../models/book_model.dart';
 
 class BookProvider extends ChangeNotifier {
   final List<Books> _books = [];
@@ -194,11 +194,6 @@ class BookProvider extends ChangeNotifier {
             return selectedTags.every((tag) => bookTags.contains(tag));
           })
           .toList();
-      /* final genreMatch = selectedTags.contains(book.genre);
-            final tropeMatch = book.tropes.any((t) => selectedTags.contains(t));
-            return genreMatch || tropeMatch;
-          })
-          .toList();*/
 
       _books
         ..clear()
