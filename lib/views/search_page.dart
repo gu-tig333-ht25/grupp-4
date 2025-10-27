@@ -128,7 +128,6 @@ class _SearchPageState extends State<SearchPage> {
                             onSelected:
                                 _toggleTag, //when pressed call _toggleTag
                             colorScheme: colorScheme,
-                            usePopularStyle: true,
                           ),
                       ],
                     ),
@@ -177,7 +176,6 @@ class _SearchPageState extends State<SearchPage> {
                                   selectedTags: selectedTags,
                                   onSelected: _toggleTag,
                                   colorScheme: colorScheme,
-                                  usePopularStyle: true,
                                 ),
                             ],
                           ),
@@ -212,7 +210,6 @@ class _SearchPageState extends State<SearchPage> {
                                   selectedTags: selectedTags,
                                   onSelected: _toggleTag,
                                   colorScheme: colorScheme,
-                                  usePopularStyle: true,
                                 ),
                             ],
                           ),
@@ -396,21 +393,19 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-//Reusable widget for tag chips
+//Reusable widget for tag chips, the logic and styling
 class _SelectableTagChip extends StatelessWidget {
   final String label; //text
   final Set<String> selectedTags; //SelectedTags says if tag is selected
   final void Function(String)
   onSelected; //callback to parent when chip is pressed
   final ColorScheme colorScheme;
-  final bool usePopularStyle;
 
   const _SelectableTagChip({
     required this.label,
     required this.selectedTags,
     required this.onSelected,
     required this.colorScheme,
-    this.usePopularStyle = false,
   });
 
   @override
@@ -419,19 +414,15 @@ class _SelectableTagChip extends StatelessWidget {
       label,
     ); //check if tag is already selected
 
-    final background = usePopularStyle
-        ? colorScheme.secondaryContainer.withAlpha(50)
-        : colorScheme.surfaceContainerHighest;
-    final selectedColor = usePopularStyle
-        ? colorScheme.secondaryContainer
-        : colorScheme.secondaryContainer;
-    final borderColor = usePopularStyle
-        ? colorScheme
-              .secondary //if chip is selected use accent color to indicate
-        : (isSelected ? colorScheme.secondary : colorScheme.outlineVariant);
+    //colorscheme for
+    final background = colorScheme.secondaryContainer.withAlpha(50);
+    final selectedColor = colorScheme.secondaryContainer;
+    final borderColor = isSelected
+        ? colorScheme.secondary
+        : colorScheme.secondary;
 
     return ChoiceChip(
-      //built in material widget designed to toggle
+      //built in material widget designed to toggle, the visual
       label: Text(label),
       selected: isSelected, //whether or not the chip is highlighted
       onSelected: (_) => onSelected(
