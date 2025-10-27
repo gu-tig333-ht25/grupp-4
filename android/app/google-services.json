@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "525406215989",
+    "firebase_url": "https://bookapp-ce0b3-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "bookapp-ce0b3",
     "storage_bucket": "bookapp-ce0b3.firebasestorage.app"
   },
