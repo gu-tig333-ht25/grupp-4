@@ -56,7 +56,7 @@ class BookPage extends StatelessWidget {
             iconTheme: IconThemeData(
               color: Colors.white, // ← ändrar färg på tillbaka-pilen
             ),
-            title: Text('Bokapp'),
+            title: Text('Paige'),
             titleTextStyle: TextStyle(
               color: Colors.white,
               fontSize: 28,
