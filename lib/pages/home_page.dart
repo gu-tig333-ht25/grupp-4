@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:template/book_info_page.dart';
-import 'model.dart';
+import 'package:template/pages/book_info_page.dart';
+import '../models/model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

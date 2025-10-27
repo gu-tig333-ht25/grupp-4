@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'model.dart';
+import '../models/model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'user_provider.dart';
+import '../providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'api_getbooks.dart';
+import '../providers/api_getbooks.dart';
 
 // ------------------------------------------
 // Global funktion för beskrivning

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
-import 'model.dart';
+import '../models/model.dart';
 
 class BookProvider extends ChangeNotifier {
   final List<Books> _books = [];

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:template/user_provider.dart';
+import 'package:template/providers/user_provider.dart';
 import 'book_info_page.dart';
-import 'model.dart';
+import '../models/model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_page.dart';
-import 'app_provider.dart';
+import '../providers/app_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final String username = "musicwilma";

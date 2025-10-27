@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
-import 'app_provider.dart';
-import 'model.dart';
-import 'api_getbooks.dart';
-import 'user_provider.dart';
-import 'login_page.dart';
+import 'providers/app_provider.dart';
+import 'models/model.dart';
+import 'providers/api_getbooks.dart';
+import 'providers/user_provider.dart';
+import 'pages/login_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 void main() async {

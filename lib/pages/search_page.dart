@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'book_info_page.dart';
-import 'api_getbooks.dart';
-import 'model.dart';
+import '../providers/api_getbooks.dart';
+import '../models/model.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

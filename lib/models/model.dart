@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'profile_page.dart';
-import "search_page.dart";
-import 'package:template/home_page.dart';
+import '../pages/profile_page.dart';
+import "../pages/search_page.dart";
+import 'package:template/pages/home_page.dart';
 import 'package:provider/provider.dart';
-import 'app_provider.dart';
+import '../providers/app_provider.dart';
 
 class RootPage extends StatelessWidget {
   const RootPage({super.key});
