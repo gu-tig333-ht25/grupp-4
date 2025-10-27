@@ -187,18 +187,25 @@ class BookProvider extends ChangeNotifier {
             (entry) => Books.fromJson(Map<String, dynamic>.from(entry.value)),
           )
           .where((book) {
-            final genreMatch = selectedTags.contains(book.genre);
+            final bookTags = <String>[
+              if (book.genre.isNotEmpty) book.genre,
+              ...book.tropes,
+            ];
+            return selectedTags.every((tag) => bookTags.contains(tag));
+          })
+          .toList();
+      /* final genreMatch = selectedTags.contains(book.genre);
             final tropeMatch = book.tropes.any((t) => selectedTags.contains(t));
             return genreMatch || tropeMatch;
           })
-          .toList();
+          .toList();*/
 
       _books
         ..clear()
         ..addAll(matchingBooks);
 
       print(
-        "Hittade ${matchingBooks.length} böcker som matchar ${selectedTags.join(', ')}",
+        "Hittade ${matchingBooks.length} böcker som matchar alla taggar ${selectedTags.join(', ')}",
       );
 
       isLoading = false;

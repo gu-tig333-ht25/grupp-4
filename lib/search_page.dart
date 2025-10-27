@@ -42,8 +42,8 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'NAMN + LOGGA',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          'Paige',
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,

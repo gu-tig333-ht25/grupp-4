@@ -18,8 +18,8 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Appnamn",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          "Paige",
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,

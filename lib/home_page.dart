@@ -63,13 +63,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Name'),
+        title: Text('Paige'),
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: true,
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
