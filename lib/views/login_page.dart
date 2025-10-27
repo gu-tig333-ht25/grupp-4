@@ -8,8 +8,10 @@ import '../providers/bottombar_nav.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController =
+      TextEditingController(); // Receives users Email
+  final TextEditingController passwordController =
+      TextEditingController(); // Receives users Password
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +32,22 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Email
+            // Email input
             TextField(
-              controller: usernameController,
+              controller: usernameController, // Stores text input
               decoration: InputDecoration(
-                labelText: 'Email',
-                prefixIcon: const Icon(Icons.person),
+                labelText:
+                    'Email', // Displays the label “Email” inside the field
+                prefixIcon: const Icon(Icons.person), // Icon on the left
                 filled: true,
                 fillColor: colorScheme.primaryContainer.withAlpha(20),
                 focusedBorder: OutlineInputBorder(
+                  // Border style and color when the field is active
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.primary),
                 ),
                 enabledBorder: OutlineInputBorder(
+                  // Border style and color when the field is inactive
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.outline),
                 ),
@@ -50,20 +55,23 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Password
+            // Password input
             TextField(
-              controller: passwordController,
-              obscureText: true,
+              controller: passwordController, // Stores text input
+              obscureText: true, // Hides the entered text for privacy
               decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock),
+                labelText:
+                    'Password', // Displays the label “Password” inside the field
+                prefixIcon: const Icon(Icons.lock), // Icon on the left
                 filled: true,
                 fillColor: colorScheme.primaryContainer.withAlpha(20),
                 focusedBorder: OutlineInputBorder(
+                  // Border style and color when the field is active
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.primary),
                 ),
                 enabledBorder: OutlineInputBorder(
+                  // Border style and color when the field is inactive
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: colorScheme.outline),
                 ),
@@ -71,15 +79,18 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Login-knapp
+            // Login-button
             SizedBox(
-              width: double.infinity,
+              width: double
+                  .infinity, // Expands to the full width of its parent container (Column)
               child: ElevatedButton(
                 onPressed: () async {
+                  // User input from textfields is stored as email and password
                   final email = usernameController.text.trim();
                   final password = passwordController.text;
 
                   if (email.isEmpty || password.isEmpty) {
+                    // OR statement
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Enter email and password')),
                     );
