@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
-import 'providers/app_provider.dart';
-import 'models/model.dart';
-import 'providers/api_getbooks.dart';
+import 'providers/bottombar_nav.dart';
+import 'providers/book_provider.dart';
 import 'providers/user_provider.dart';
-import 'pages/login_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import '../models/authgate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NavigationBottomBar()),
       ],
       child: MaterialApp(
-        title: 'BookApp',
+        title: 'Paige',
         debugShowCheckedModeBanner: false,
         theme: FlexThemeData.light(
           colors: const FlexSchemeColor(
@@ -44,27 +42,6 @@ class MyApp extends StatelessWidget {
         ),
         home: const AuthGate(),
       ),
-    );
-  }
-}
-
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        final user = snapshot.data;
-        if (user != null) {
-          // ensure provider loads fresh data when user is signed in
-          Future.microtask(() => context.read<UserProvider>().loadUserData());
-          return const RootPage();
-        } else {
-          return LoginPage();
-        }
-      },
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/book_info_page.dart';
-import '../models/model.dart';
+import 'package:template/views/book_info_page.dart';
+import '../models/book_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
     "Julia Quinn",
     "Suzanne Collins",
     "Lars Kepler",
+    "Fredrik Backman",
   ];
 
   Map<String, List<Books>> booksByAuthor = {};
@@ -80,6 +81,8 @@ class _HomePageState extends State<HomePage> {
           bookGenreListHorizontal(booksByAuthor["Suzanne Collins"] ?? []),
           SizedBox(height: 20),
           bookGenreListHorizontal(booksByAuthor["Lars Kepler"] ?? []),
+          SizedBox(height: 20),
+          bookGenreListHorizontal(booksByAuthor["Fredrik Backman"] ?? []),
         ],
       ),
     );

@@ -1,53 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import '../models/model.dart';
-
-/// Logga in automatiskt med testkonto
-Future<User?> loginTestUser() async {
-  try {
-    const email = "wilma@example.com"; // ersätt med ert testkonto
-    const password = "test1234"; // ersätt med lösenord
-
-    final cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    print("Inloggad som ${cred.user?.email} (UID: ${cred.user?.uid})");
-    return cred.user;
-  } catch (e) {
-    print("Inloggning misslyckades: $e");
-    return null;
-  }
-}
-
-/// Testar att skriva och läsa användardata i Realtime Database
-Future<void> testUserData(User user) async {
-  try {
-    final db = FirebaseDatabase.instance.ref("users/${user.uid}");
-
-    final snapshot = await db.get();
-
-    if (!snapshot.exists) {
-      // Skapa användaren första gången
-      await db.set({
-        "name": "Wilma Test",
-        "email": user.email,
-        "wantToRead": [],
-        "haveRead": [],
-      });
-      print("Ny användare skapad med tomma listor.");
-    } else {
-      print("Användardata finns redan:");
-      print(snapshot.value);
-    }
-  } catch (e) {
-    print("Fel vid testUserData: $e");
-  }
-}
-
-//förslag
+import '../models/book_model.dart';
 
 class UserProvider extends ChangeNotifier {
   String username = '';

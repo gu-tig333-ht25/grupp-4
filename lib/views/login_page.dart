@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
-import '../models/model.dart';
-import '../providers/app_provider.dart';
+import '../models/rootpage.dart';
+import '../providers/bottombar_nav.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
