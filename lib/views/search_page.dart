@@ -331,25 +331,28 @@ class _SearchPageState extends State<SearchPage> {
                               width: 60,
                               height: 100,
                               decoration: BoxDecoration(
-                                //how gray standard portrait should look
                                 borderRadius: BorderRadius.circular(8),
                                 color: Colors
                                     .grey[300], //color incase cover image is not fetched
                                 image: DecorationImage(
-                                  //
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(book.coverUrl),
+                                  //Displays image of bookcover
+                                  fit: BoxFit
+                                      .cover, //makes image fill the previous gray container completely
+                                  image: NetworkImage(
+                                    book.coverUrl,
+                                  ), //load image from the URL
                                 ),
                               ),
                             ),
                             const SizedBox(width: 16),
                             // Book info
                             Expanded(
+                              //take up all remaining space on horizontal axel
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    book.title,
+                                    book.title, //dislay books title
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -358,7 +361,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    book.author,
+                                    book.author, //display books author
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: colorScheme.primary,
@@ -366,7 +369,8 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    book.year > 0
+                                    book.year >
+                                            0 //if year published is greater than 0, display books publishing year
                                         ? "Published: ${book.year}"
                                         : "",
                                     style: TextStyle(
@@ -395,8 +399,9 @@ class _SearchPageState extends State<SearchPage> {
 //Reusable widget for tag chips
 class _SelectableTagChip extends StatelessWidget {
   final String label; //text
-  final Set<String> selectedTags; //it it's selected
-  final void Function(String) onSelected; //what to do when selected
+  final Set<String> selectedTags; //SelectedTags says if tag is selected
+  final void Function(String)
+  onSelected; //callback to parent when chip is pressed
   final ColorScheme colorScheme;
   final bool usePopularStyle;
 
@@ -421,16 +426,19 @@ class _SelectableTagChip extends StatelessWidget {
         ? colorScheme.secondaryContainer
         : colorScheme.secondaryContainer;
     final borderColor = usePopularStyle
-        ? colorScheme.secondary
+        ? colorScheme
+              .secondary //if chip is selected use accent color to indicate
         : (isSelected ? colorScheme.secondary : colorScheme.outlineVariant);
 
     return ChoiceChip(
-      //return when chip is selected
+      //built in material widget designed to toggle
       label: Text(label),
-      selected: isSelected,
-      onSelected: (_) => onSelected(label),
-      backgroundColor: background,
-      selectedColor: selectedColor,
+      selected: isSelected, //whether or not the chip is highlighted
+      onSelected: (_) => onSelected(
+        label,
+      ), //when chip is pressed call onSelected (that gives the label)
+      backgroundColor: background, //color when not selected
+      selectedColor: selectedColor, //color when selected
       labelStyle: TextStyle(color: colorScheme.onSecondaryContainer),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
