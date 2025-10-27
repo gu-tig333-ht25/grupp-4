@@ -82,47 +82,56 @@ class LoginPage extends StatelessWidget {
             // Login-button
             SizedBox(
               width: double
-                  .infinity, // Expands to the full width of its parent container (Column)
+                  .infinity, // Makes the button expand to full available width inside the Column
               child: ElevatedButton(
                 onPressed: () async {
-                  // User input from textfields is stored as email and password
+                  // Get user input from the text fields
                   final email = usernameController.text.trim();
                   final password = passwordController.text;
 
                   if (email.isEmpty || password.isEmpty) {
-                    // OR statement
+                    // OR condition: show message if either email or password is empty
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Enter email and password')),
                     );
                     return;
                   }
 
+                  // Try signing in with fierbase
                   try {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: email,
                       password: password,
                     );
 
+                    // Stop if the page is no longer active
                     if (!context.mounted) return;
 
+                    // Load the user's data
                     await context.read<UserProvider>().loadUserData();
 
+                    // Stop if the page is no longer active
                     if (!context.mounted) return;
 
+                    // Set the active view in the bottom navigation bar to index 1 (home)
                     context.read<NavigationBottomBar>().setIndex(1);
 
+                    // Stop if the page is no longer active
                     if (!context.mounted) return;
 
+                    // Navigate to RootPage and replace the current login view
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const RootPage()),
                     );
                   } on FirebaseAuthException catch (e) {
+                    // Handles Firebase login errors
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(e.message ?? 'Login failed')),
                     );
                   } catch (e) {
+                    // Handles any other unexpected errors
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(
                       context,
