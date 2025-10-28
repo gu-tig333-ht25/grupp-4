@@ -15,7 +15,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   //holds mutable data and logic
   final TextEditingController _searchController =
-      TextEditingController(); //manages text user types in seartch box
+      TextEditingController(); //manages text user types in search box
   final Set<String> selectedTags = {}; //set = unique collection
   bool showGenres =
       false; //tracks whether or not genre and tropes are expanded, start collapsed
@@ -41,7 +41,7 @@ class _SearchPageState extends State<SearchPage> {
     if (query.isNotEmpty) {
       context.read<BookProvider>().fetchBooks(
         query,
-      ); //if not empy call BookProvider
+      ); //if not empty call BookProvider
     }
   }
 
@@ -234,7 +234,7 @@ class _SearchPageState extends State<SearchPage> {
                     final bookProvider = context
                         .read<
                           BookProvider
-                        >(); //fetch books and their data from BookProvider
+                        >(); //being able to fetch books and their data from BookProvider
 
                     if (selectedTags.isNotEmpty) {
                       //if any filter chips are selected
@@ -344,7 +344,7 @@ class _SearchPageState extends State<SearchPage> {
                             const SizedBox(width: 16),
                             // Book info
                             Expanded(
-                              //take up all remaining space on horizontal axel
+                              //take up all remaining space on horizontal axis
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

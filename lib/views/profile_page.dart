@@ -93,7 +93,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       // reset bottom navigation bar index, before navigating away
                       context.read<NavigationBottomBar>().setIndex(1);
 
-                      //
                       if (context.mounted) {
                         //check if the widget is still in the widget tree, without this the app could crash if async is in progress
                         Navigator.pushReplacement(
