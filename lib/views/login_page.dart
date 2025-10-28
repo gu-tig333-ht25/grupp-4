@@ -16,20 +16,27 @@ class LoginPage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Paige",
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
-        centerTitle: true,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              decoration: BoxDecoration(
+                color: colorScheme.primary,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: Text(
+                "Paige",
+                style: TextStyle(
+                  fontSize: 80,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            const SizedBox(height: 70),
             // Email
             TextField(
               controller: usernameController,
