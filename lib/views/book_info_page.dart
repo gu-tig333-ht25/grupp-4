@@ -49,105 +49,90 @@ class BookPage extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    // Bokomslag
+                    SizedBox(
                       height: 152,
                       width: 110,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(updatedBook.coverUrl),
-                        ),
+                      child: Image.network(
+                        updatedBook.coverUrl,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Container(
-                      height: 152,
-                      width: 200,
-                      margin: EdgeInsets.only(left: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Title: ${updatedBook.title}'),
-                            SizedBox(height: 3),
-                            Text('Author: ${updatedBook.author}'),
-                            SizedBox(height: 3),
-                            Text('Published: ${updatedBook.year}'),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
+
+                    SizedBox(width: 8),
+
+                    // Textkolumn
                     Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                width: constraints.maxWidth,
-                                child: FloatingActionButton.extended(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: BorderSide(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.secondary, // färg på border
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    final userProvider = context
-                                        .read<UserProvider>();
-                                    await userProvider.addBookToWantToRead(
-                                      book,
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          '"${book.title}" added to Want to Read',
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  label: Text('Want to read'),
-                                  heroTag: "wantToRead",
-                                ),
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Title: ${updatedBook.title}'),
+                          SizedBox(height: 3),
+                          Text('Author: ${updatedBook.author}'),
+                          SizedBox(height: 3),
+                          Text('Published: ${updatedBook.year}'),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(width: 8),
+
+                    // Knappar
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          FloatingActionButton.extended(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
-                              SizedBox(height: 10),
-                              SizedBox(
-                                width: constraints.maxWidth,
-                                child: FloatingActionButton.extended(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: BorderSide(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.secondary, // färg på border
-                                    ),
+                            ),
+                            onPressed: () async {
+                              final userProvider = context.read<UserProvider>();
+                              await userProvider.addBookToWantToRead(book);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '"${book.title}" added to Want to Read',
                                   ),
-                                  onPressed: () async {
-                                    final userProvider = context
-                                        .read<UserProvider>();
-                                    await userProvider.addBookToHaveRead(book);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          '"${book.title}" added to Have Read',
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  label: Text('Have read'),
-                                  heroTag: "haveRead",
                                 ),
+                              );
+                            },
+                            label: Text('Want to read'),
+                            heroTag: "wantToRead", // unikt heroTag per bok
+                          ),
+                          SizedBox(height: 10),
+                          FloatingActionButton.extended(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
-                            ],
-                          );
-                        },
+                            ),
+                            onPressed: () async {
+                              final userProvider = context.read<UserProvider>();
+                              await userProvider.addBookToHaveRead(book);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '"${book.title}" added to Have Read',
+                                  ),
+                                ),
+                              );
+                            },
+                            label: Text('Have read'),
+                            heroTag: "haveRead",
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
+
                 SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
