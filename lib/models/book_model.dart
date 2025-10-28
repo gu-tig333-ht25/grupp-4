@@ -74,32 +74,44 @@ class Books {
         coverId: parseInt(
           json['cover_i'],
         ), //coverId parsed from open library's cover_i
-        workKey: json['key'] ?? '',
-        description: json['description'] is String
+        workKey:
+            json['key'] ??
+            '', //assigns workKey the value from JSONs key if not null. otherwise ''
+        description:
+            json['description']
+                is String //if description is a string, use directly
             ? json['description']
-            : (json['description'] is Map
+            : (json['description']
+                      is Map //if description is a map try to acces and cast to String?
                   ? (json['description']['value'] as String?)
-                  : null),
+                  : null), //if neither string nor map return null
       );
     }
 
     return Books(
-      id: json['id'] ?? '',
+      //take map of data (JSON from firebase or openlibrary), extract fields, create and return new Books object
+      id: json['id'] ?? '', //acces id key from JSON map, if null return empty
       title: json['title'] ?? '',
       author: json['author'] ?? 'Unknown author',
-      year: parseInt(json['year']) ?? 0,
+      year:
+          parseInt(json['year']) ??
+          0, //tries to convert into int (using parseInt), else 0
       genre: json['genre'] ?? '',
       tropes:
-          (json['tropes'] as List?)?.map((e) => e.toString()).toList() ?? [],
+          (json['tropes'] as List?)?.map((e) => e.toString()).toList() ??
+          [], //get tropes as list, if not null, convert every element to String, turn back into list. If null make empty list instead.
       coverId: parseInt(json['coverId']),
       workKey: json['workKey'] ?? '',
-      description: json['description']?.toString(),
+      description: json['description']
+          ?.toString(), //if description exists, convert it to string. Otherwise null
     );
   }
 
   Map<String, dynamic> toJson() {
+    //Save data to database, convert back to JSON
     return {
-      'id': id,
+      //creates Map literal, each key corresponds to model properties
+      'id': id, //id is the same as this.id
       'title': title,
       'author': author,
       'year': year,
@@ -108,6 +120,6 @@ class Books {
       'coverId': coverId,
       'workKey': workKey,
       'description': description,
-    };
+    }; //map created from this gets returned to book_provider and user_provider that calls on this method
   }
 }
