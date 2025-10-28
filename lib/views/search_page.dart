@@ -278,7 +278,6 @@ class _SearchPageState extends State<SearchPage> {
                               width: 60,
                               height: 100,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
                                 color: Colors.grey[300],
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
