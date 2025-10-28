@@ -1,3 +1,5 @@
+// Global tags lists used in search_page for showing different filter tags.
+// Could be used in the future for a function of "adding tags for a book"
 List<String> listGenre = [
   "Fantasy",
   "Science-Fiction",
