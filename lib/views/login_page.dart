@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
             // Login-button
             SizedBox(
               width: double
-                  .infinity, // Makes the button expand to full available width inside the Column
+                  .infinity, // Makes the button expand to full available width inside the Column (parent)
               child: ElevatedButton(
                 onPressed: () async {
                   // Get user input from the text fields

@@ -12,17 +12,17 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Watches for changes in NavigationBottomBar
-    final nav = context.watch<NavigationBottomBar>();
+    final navProvider = context.watch<NavigationBottomBar>();
 
     return Scaffold(
       // Displays one page at a time, but keeps the state of all pages alive
       body: IndexedStack(
-        index: nav.selectedIndex, // Shows the currently selected page
+        index: navProvider.selectedIndex, // Shows the currently selected page
         children: [SearchPage(), HomePage(), ProfilePage()],
       ),
       // Bottom navigation bar for switching between pages
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: nav.selectedIndex, // Highlights the active tab
+        currentIndex: navProvider.selectedIndex, // Highlights the active tab
         onTap: (index) => context.read<NavigationBottomBar>().setIndex(
           index,
         ), // Updates selected tab in provider

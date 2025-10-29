@@ -36,8 +36,9 @@ class Books {
       //helperfuction to convert to int? to avoid crashes if JSON contains a number as int/double/string
       if (v == null) return null; //if null return null
       if (v is int) return v; //if int return int
-      if (v is double)
-        return v.toInt(); //if double return int (drop the fractional)
+      if (v is double) {
+        return v.toInt();
+      } //if double return int (drop the fractional)
       if (v is String) return int.tryParse(v); //if string try to to parse
       return null; //otherwise return null
     }

@@ -33,22 +33,19 @@ class BookPage extends StatelessWidget {
             body: Center(child: Text('Could not load book data')),
           );
         }
-
+        // ("updatedBook": so it's always the latest version from firebase)
         final updatedBook = snapshot
             .data!; //If the future resolved and returned data, store it in updatedBook
         //(snapshot is not null, checked above, so snapshot.data is true)
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.primary, //Uses primary color from theme
+            backgroundColor: Theme.of(context).colorScheme.primary,
             iconTheme: IconThemeData(
               color: Colors.white, // sets icon color of "return arrow"
             ),
             title: Text('Paige'),
             titleTextStyle: TextStyle(
-              //the same text style in all app bars
               color: Colors.white,
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -71,7 +68,7 @@ class BookPage extends StatelessWidget {
                           fit: BoxFit.cover,
                           image: NetworkImage(
                             updatedBook.coverUrl,
-                          ), //Book cover image from updatedBook (so it's always the latest version from firebase??)
+                          ), //Book cover image from updatedBook
                         ),
                       ),
                     ),
@@ -108,9 +105,9 @@ class BookPage extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     side: BorderSide(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary, // Color of the border
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.secondary,
                                     ),
                                   ),
                                   onPressed: () async {

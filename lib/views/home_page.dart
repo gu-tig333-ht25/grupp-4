@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         // Convert JSON data into a list of Books objects (max 5 per author)
         final books = docs
             .map((e) => Books.fromJson(e))
-            .take(5) // max 5 böcker per författare
+            .take(5) // max 5 books per author
             .toList();
 
         // Store the list of books in the map (booksByAuthor) under the author's name
@@ -90,7 +90,8 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.all(16),
         children: [
           bookGenreListHorizontal(
-            booksByAuthor["Julia Quinn"] ?? [],
+            booksByAuthor["Julia Quinn"] ??
+                [], // If authour's name doesn't exist locally return null
           ), // A horizontal list of authour's name and 5 of their books
           SizedBox(height: 20),
           bookGenreListHorizontal(booksByAuthor["Suzanne Collins"] ?? []),
@@ -115,7 +116,7 @@ Widget bookGenreListHorizontal(List<Books> bookInfo) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      // Titel
+      // Title
       Container(
         margin: EdgeInsets.only(bottom: 4),
         child: Text(

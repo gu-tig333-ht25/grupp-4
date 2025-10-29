@@ -12,7 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensures Flutter is properly initialized before Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ); // Connects the app to the fierbase project
+  ); // Connects the app to the firebase project
   runApp(const MyApp());
 }
 
