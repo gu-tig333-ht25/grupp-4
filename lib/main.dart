@@ -10,9 +10,19 @@ import '../models/authgate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensures Flutter is properly initialized before Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ); // Connects the app to the firebase project
+
+  try {
+    // Initialize Firebase for the correct platform (web or Android)
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    ); // Connects the app to the firebase project
+  } on FirebaseException catch (e) {
+    if (e.code == 'duplicate-app') {
+    } else {
+      rethrow;
+    }
+  }
+
   runApp(const MyApp());
 }
 
