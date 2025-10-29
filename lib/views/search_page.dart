@@ -5,39 +5,52 @@ import '../providers/book_provider.dart';
 import '../models/global_tags.dart';
 
 class SearchPage extends StatefulWidget {
+  //statefulpage as to change over time (like selecting tags)
   const SearchPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SearchPage> createState() => _SearchPageState(); //tells flutter that this widgets state will be managed by _SearchPageState
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final TextEditingController _searchController = TextEditingController();
-  final Set<String> selectedTags = {};
-  bool showGenres = false;
+  //holds mutable data and logic
+  final TextEditingController _searchController =
+      TextEditingController(); //manages text user types in search box
+  final Set<String> selectedTags = {}; //set = unique collection
+  bool showGenres =
+      false; //tracks whether or not genre and tropes are expanded, start collapsed
   bool showTropes = false;
 
   void _toggleTag(String label) {
+    //helper function
     setState(() {
+      //set state to rebuild UI when new tag is selected or unselected
       if (selectedTags.contains(label)) {
+        //if pressed and already contains a checkmark, take checkmark away
         selectedTags.remove(label);
       } else {
-        selectedTags.add(label);
+        selectedTags.add(label); //otherwise add a checkmark
       }
     });
   }
 
   void _searchBooks(BuildContext context) {
-    final query = _searchController.text.trim();
+    //helper function
+    final query = _searchController.text
+        .trim(); //read text user types, remove extra spaces
     if (query.isNotEmpty) {
-      context.read<BookProvider>().fetchBooks(query);
+      context.read<BookProvider>().fetchBooks(
+        query,
+      ); //if not empty call BookProvider
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final bookProvider = context.watch<BookProvider>();
+    //UI
+    final colorScheme = Theme.of(context).colorScheme; //colorscheme from main
+    final bookProvider = context
+        .watch<BookProvider>(); //watch for changes in book data, update UI
 
     return Scaffold(
       appBar: AppBar(
@@ -50,9 +63,10 @@ class _SearchPageState extends State<SearchPage> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        //makes whole page scrollable
         child: Column(
           children: [
-            // Sökfält
+            // Searchfield
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
@@ -62,7 +76,9 @@ class _SearchPageState extends State<SearchPage> {
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.send),
-                    onPressed: () => _searchBooks(context),
+                    onPressed: () => _searchBooks(
+                      context,
+                    ), //when pressing enter or send icon, run _searchBooks()
                   ),
                   filled: true,
                   fillColor: colorScheme.primaryContainer.withAlpha(20),
@@ -75,17 +91,20 @@ class _SearchPageState extends State<SearchPage> {
                     borderSide: BorderSide(color: colorScheme.outline),
                   ),
                 ),
-                onSubmitted: (_) => _searchBooks(context),
+                onSubmitted: (_) => _searchBooks(
+                  context,
+                ), //when pressing enter or send icon, run _searchBooks()
               ),
             ),
 
-            // Populära taggar
+            // Popular tags
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
+                    //header for popular tags
                     'Popular tags:',
                     style: TextStyle(
                       fontSize: 20,
@@ -97,16 +116,18 @@ class _SearchPageState extends State<SearchPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Wrap(
+                      //lays out chips, wrap to new line when needed
                       spacing: 8,
                       runSpacing: 5,
                       children: [
-                        for (final tag in listPopular)
+                        for (final tag
+                            in listPopular) //for each tag in listPopular, create a _SelectableTagChip
                           _SelectableTagChip(
                             label: tag,
                             selectedTags: selectedTags,
-                            onSelected: _toggleTag,
+                            onSelected:
+                                _toggleTag, //when pressed call _toggleTag
                             colorScheme: colorScheme,
-                            usePopularStyle: true,
                           ),
                       ],
                     ),
@@ -117,19 +138,23 @@ class _SearchPageState extends State<SearchPage> {
 
             const SizedBox(height: 16),
 
-            // Filter-sektion
+            // Filter section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ExpansionTile(
+                    //lets Genres expand/collapse
                     title: const Text("Genres"),
                     leading: const Icon(Icons.category),
                     textColor: colorScheme.primary,
                     iconColor: colorScheme.primary,
                     onExpansionChanged: (expanded) {
-                      setState(() => showGenres = expanded);
+                      //callback for bool value
+                      setState(
+                        () => showGenres = expanded,
+                      ); //setState to change UI depending on expansion true/false
                     },
                     children: [
                       Padding(
@@ -143,13 +168,14 @@ class _SearchPageState extends State<SearchPage> {
                             spacing: 8,
                             runSpacing: 8,
                             children: [
-                              for (final genre in listGenre)
+                              for (final genre
+                                  in listGenre) //for each genre in listGenre make a chip
                                 _SelectableTagChip(
+                                  //same type of chip for tropes and genres
                                   label: genre,
                                   selectedTags: selectedTags,
                                   onSelected: _toggleTag,
                                   colorScheme: colorScheme,
-                                  usePopularStyle: true,
                                 ),
                             ],
                           ),
@@ -157,6 +183,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ],
                   ),
+                  //Same as genres but for Tropes
                   ExpansionTile(
                     title: const Text("Tropes"),
                     leading: const Icon(Icons.favorite),
@@ -183,7 +210,6 @@ class _SearchPageState extends State<SearchPage> {
                                   selectedTags: selectedTags,
                                   onSelected: _toggleTag,
                                   colorScheme: colorScheme,
-                                  usePopularStyle: true,
                                 ),
                             ],
                           ),
@@ -194,26 +220,34 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Search-knapp
-            // Search-knapp
+            const SizedBox(
+              height: 16,
+            ), //SizedBox for some space inbetween widgets
+            //Search function
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
-                width: double.infinity,
+                width: double
+                    .infinity, //Button takes up the full available width of parent
                 child: ElevatedButton(
                   onPressed: () async {
-                    final bookProvider = context.read<BookProvider>();
+                    final bookProvider = context
+                        .read<
+                          BookProvider
+                        >(); //being able to fetch books and their data from BookProvider
 
                     if (selectedTags.isNotEmpty) {
-                      await bookProvider.searchBooksByTags(selectedTags);
+                      //if any filter chips are selected
+                      await bookProvider.searchBooksByTags(
+                        selectedTags,
+                      ); //call searchBooksByTags based on those tags
                     } else {
                       _searchBooks(
                         context,
-                      ); // fallback till titel/author-sökning
+                      ); //if no tags selected call _searchBooks (search by author/title)
                     }
                   },
+                  //Search button
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.secondary,
                     foregroundColor: colorScheme.onSecondary,
@@ -229,38 +263,53 @@ class _SearchPageState extends State<SearchPage> {
 
             const SizedBox(height: 16),
 
-            // Boklista scrollbar
+            //Book list
             Builder(
               builder: (context) {
                 if (bookProvider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  ); //show buffering spinner when loading
                 }
 
                 if (bookProvider.books.isEmpty) {
-                  return const Center(child: Text('No books found.'));
+                  return const Center(
+                    child: Text('No books found.'),
+                  ); //if no results found, print that
                 }
 
                 return ListView.builder(
+                  //build list of books if available
                   physics:
-                      NeverScrollableScrollPhysics(), // disable scroll på listan
+                      NeverScrollableScrollPhysics(), // disable scroll on the list
                   shrinkWrap:
-                      true, // gör så listan tar så lite plats som möjligt
+                      true, // make the list occupy as little space as possible
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: bookProvider.books.length,
+                  itemCount: bookProvider
+                      .books
+                      .length, //make list as long as the results from bookProvider
                   itemBuilder: (context, index) {
-                    final book = bookProvider.books[index];
+                    final book = bookProvider
+                        .books[index]; //grab current book from list using index
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ), //each book is wrapped in padding
                       child: OutlinedButton(
+                        //every bookentry is an outlined button
                         onPressed: () {
-                          final book = bookProvider.books[index];
                           Navigator.push(
+                            //when pressed open a new page
                             context,
                             MaterialPageRoute(
-                              builder: (_) => BookPage(book: book),
+                              //transition animation
+                              builder: (_) => BookPage(
+                                book: book,
+                              ), //open BookPage with book object as the constructor
                             ),
                           );
                         },
+                        //style for bookentries that are outlined buttons
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.grey[200],
                           side: BorderSide(color: colorScheme.primary),
@@ -273,26 +322,32 @@ class _SearchPageState extends State<SearchPage> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Omslag
+                            //Book cover
                             Container(
+                              //container for book cover
                               width: 60,
                               height: 100,
                               decoration: BoxDecoration(
                                 color: Colors.grey[300],
                                 image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(book.coverUrl),
+                                  //Displays image of bookcover
+                                  fit: BoxFit
+                                      .cover, //makes image fill the previous gray container completely
+                                  image: NetworkImage(
+                                    book.coverUrl,
+                                  ), //load image from the URL
                                 ),
                               ),
                             ),
                             const SizedBox(width: 16),
-                            // Bokinfo
+                            // Book info
                             Expanded(
+                              //take up all remaining space on horizontal axis
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    book.title,
+                                    book.title, //dislay books title
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -301,7 +356,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    book.author,
+                                    book.author, //display books author
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: colorScheme.primary,
@@ -309,7 +364,8 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    book.year > 0
+                                    book.year >
+                                            0 //if year published is greater than 0, display books publishing year
                                         ? "Published: ${book.year}"
                                         : "",
                                     style: TextStyle(
@@ -335,42 +391,43 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
-// --- Komponent ---
+//Reusable widget for tag chips, the logic and styling
 class _SelectableTagChip extends StatelessWidget {
-  final String label;
-  final Set<String> selectedTags;
-  final void Function(String) onSelected;
+  final String label; //text
+  final Set<String> selectedTags; //SelectedTags says if tag is selected
+  final void Function(String)
+  onSelected; //callback to parent when chip is pressed
   final ColorScheme colorScheme;
-  final bool usePopularStyle;
 
   const _SelectableTagChip({
     required this.label,
     required this.selectedTags,
     required this.onSelected,
     required this.colorScheme,
-    this.usePopularStyle = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool isSelected = selectedTags.contains(label);
+    final bool isSelected = selectedTags.contains(
+      label,
+    ); //check if tag is already selected
 
-    final background = usePopularStyle
-        ? colorScheme.secondaryContainer.withAlpha(50)
-        : colorScheme.surfaceContainerHighest;
-    final selectedColor = usePopularStyle
-        ? colorScheme.secondaryContainer
-        : colorScheme.secondaryContainer;
-    final borderColor = usePopularStyle
+    //colorscheme for
+    final background = colorScheme.secondaryContainer.withAlpha(50);
+    final selectedColor = colorScheme.secondaryContainer;
+    final borderColor = isSelected
         ? colorScheme.secondary
-        : (isSelected ? colorScheme.secondary : colorScheme.outlineVariant);
+        : colorScheme.secondary;
 
     return ChoiceChip(
+      //built in material widget designed to toggle, the visual
       label: Text(label),
-      selected: isSelected,
-      onSelected: (_) => onSelected(label),
-      backgroundColor: background,
-      selectedColor: selectedColor,
+      selected: isSelected, //whether or not the chip is highlighted
+      onSelected: (_) => onSelected(
+        label,
+      ), //when chip is pressed call onSelected (that gives the label)
+      backgroundColor: background, //color when not selected
+      selectedColor: selectedColor, //color when selected
       labelStyle: TextStyle(color: colorScheme.onSecondaryContainer),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

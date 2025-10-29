@@ -9,13 +9,13 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import '../models/authgate.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // Ensures Flutter is properly initialized before Firebase
 
   try {
-    // Initiera Firebase för rätt plattform (web eller Android)
+    // Initialize Firebase for the correct platform (web or Android)
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    );
+    ); // Connects the app to the firebase project
   } on FirebaseException catch (e) {
     if (e.code == 'duplicate-app') {
     } else {
@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+      // Global providers for user, book data, and navigation state
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => BookProvider()),
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Paige',
         debugShowCheckedModeBanner: false,
+        // The app’s color theme (FlexColorScheme)
         theme: FlexThemeData.light(
           colors: const FlexSchemeColor(
             primary: Color(0xff2e7d32),
@@ -52,6 +54,8 @@ class MyApp extends StatelessWidget {
             error: Color(0xffb00020),
           ),
         ),
+        // Directs the user to AuthGate, which decides whether to show
+        // the login screen or the active RootPage
         home: const AuthGate(),
       ),
     );

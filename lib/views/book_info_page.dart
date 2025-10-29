@@ -7,32 +7,42 @@ import 'package:provider/provider.dart';
 import '../providers/book_provider.dart';
 
 class BookPage extends StatelessWidget {
-  final Books book;
+  final Books book; //Takes an instance of Books model, named book
 
-  const BookPage({super.key, required this.book});
+  const BookPage({super.key, required this.book}); //Constructor for BookPage
 
   @override
   Widget build(BuildContext context) {
-    final bookProvider = context.read<BookProvider>();
+    final bookProvider = context
+        .read<BookProvider>(); //Variable to access (read) BookProvider
 
     return FutureBuilder<Books>(
-      future: bookProvider.getOrCreateBook(book),
+      //FutureBuilder executes asynchronous functions/code and rebuilds UI based on the function's result
+      future: bookProvider.getOrCreateBook(
+        book,
+      ), //future: needs to be resolved in order to display something on the screen (in this case getOrCreateBook must finish executing first)
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          //While waiting for the future to resolve, show a loading spinner
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
 
         if (!snapshot.hasData) {
-          return Scaffold(body: Center(child: Text('Kunde inte ladda boken')));
+          //If the future resolved but returned no data, show an error message
+          return Scaffold(
+            body: Center(child: Text('Could not load book data')),
+          );
         }
-
-        final updatedBook = snapshot.data!;
+        // ("updatedBook": so it's always the latest version from firebase)
+        final updatedBook = snapshot
+            .data!; //If the future resolved and returned data, store it in updatedBook
+        //(snapshot is not null, checked above, so snapshot.data is true)
 
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
             iconTheme: IconThemeData(
-              color: Colors.white, // ← ändrar färg på tillbaka-pilen
+              color: Colors.white, // sets icon color of "return arrow"
             ),
             title: Text('Paige'),
             titleTextStyle: TextStyle(
@@ -46,6 +56,7 @@ class BookPage extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             child: Column(
               children: [
+                // Children with book information and buttons
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -55,7 +66,9 @@ class BookPage extends StatelessWidget {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(updatedBook.coverUrl),
+                          image: NetworkImage(
+                            updatedBook.coverUrl,
+                          ), //Book cover image from updatedBook
                         ),
                       ),
                     ),
@@ -68,6 +81,7 @@ class BookPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            //Shows info about the book the user clicked on
                             Text('Title: ${updatedBook.title}'),
                             SizedBox(height: 3),
                             Text('Author: ${updatedBook.author}'),
@@ -87,30 +101,33 @@ class BookPage extends StatelessWidget {
                               SizedBox(
                                 width: constraints.maxWidth,
                                 child: FloatingActionButton.extended(
+                                  //Button (want to read) that is as wide as the remaining space
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     side: BorderSide(
                                       color: Theme.of(
                                         context,
-                                      ).colorScheme.secondary, // färg på border
+                                      ).colorScheme.secondary,
                                     ),
                                   ),
                                   onPressed: () async {
                                     final userProvider = context
                                         .read<UserProvider>();
                                     await userProvider.addBookToWantToRead(
-                                      book,
+                                      //when pressed, adds the book to the user's "want to read" list
+                                      book, //book is the book instance passed to BookPage
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          '"${book.title}" added to Want to Read',
+                                          '"${book.title}" added to Want to Read', //Shows a snackbar confirming the added book
                                         ),
                                       ),
                                     );
                                   },
                                   label: Text('Want to read'),
-                                  heroTag: "wantToRead",
+                                  heroTag:
+                                      "wantToRead", //heroTag is needed to differentiate between multiple FloatingActionButtons on the same screen
                                 ),
                               ),
                               SizedBox(height: 10),
@@ -122,23 +139,26 @@ class BookPage extends StatelessWidget {
                                     side: BorderSide(
                                       color: Theme.of(
                                         context,
-                                      ).colorScheme.secondary, // färg på border
+                                      ).colorScheme.secondary,
                                     ),
                                   ),
                                   onPressed: () async {
                                     final userProvider = context
                                         .read<UserProvider>();
-                                    await userProvider.addBookToHaveRead(book);
+                                    await userProvider.addBookToHaveRead(
+                                      book,
+                                    ); //when pressed, adds the book to the user's "have read" list
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          '"${book.title}" added to Have Read',
+                                          '"${book.title}" added to Have Read', //Shows a snackbar confirming the added book
                                         ),
                                       ),
                                     );
                                   },
                                   label: Text('Have read'),
-                                  heroTag: "haveRead",
+                                  heroTag:
+                                      "haveRead", //different heroTag for this button
                                 ),
                               ),
                             ],
@@ -152,14 +172,15 @@ class BookPage extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // GENRE RAD
+                    // Row for genre tags
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Genre: '),
                         SizedBox(width: 6),
                         OutlinedButton(
-                          onPressed: () {},
+                          //Gives the same look as the tags in search_page (for consistency)
+                          onPressed: () {}, //No action when pressing genre tag
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Theme.of(
                               context,
@@ -177,8 +198,9 @@ class BookPage extends StatelessWidget {
                           ),
                           child: Text(
                             updatedBook.genre.isNotEmpty
-                                ? updatedBook.genre
-                                : "No genre",
+                                ? updatedBook
+                                      .genre //If genre is not empty, show the genre of "updatedBook"
+                                : "No genre", //If genre is empty, show "No genre" in the tag/"button"
                             style: TextStyle(
                               color: Theme.of(
                                 context,
@@ -189,7 +211,7 @@ class BookPage extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 10),
-                    // TROPES RAD
+                    // Row of trope tags
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -200,10 +222,12 @@ class BookPage extends StatelessWidget {
                             spacing: 8,
                             runSpacing: 8,
                             children: updatedBook.tropes.isNotEmpty
-                                ? updatedBook.tropes
+                                ? updatedBook
+                                      .tropes //If tropes list is not empty, map each trope to an OutlinedButton (there can be multiple trope tags)
                                       .map(
                                         (trope) => OutlinedButton(
-                                          onPressed: () {},
+                                          onPressed:
+                                              () {}, //No action when pressing trope tag/"button"
                                           style: OutlinedButton.styleFrom(
                                             backgroundColor: Theme.of(context)
                                                 .colorScheme
@@ -224,7 +248,7 @@ class BookPage extends StatelessWidget {
                                             ),
                                           ),
                                           child: Text(
-                                            trope,
+                                            trope, //Displays the trope text
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
@@ -235,6 +259,7 @@ class BookPage extends StatelessWidget {
                                       )
                                       .toList()
                                 : [
+                                    //If tropes list is empty, show a single OutlinedButton saying "No tropes"
                                     OutlinedButton(
                                       onPressed: null,
                                       style: OutlinedButton.styleFrom(
@@ -274,6 +299,7 @@ class BookPage extends StatelessWidget {
                   ],
                 ),
 
+                // Description box
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.all(10),
@@ -285,17 +311,26 @@ class BookPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: SingleChildScrollView(
+                      //Makes the description scrollable if it's too long to fit in the box
                       child: FutureBuilder<String>(
-                        future: fetchDescription(updatedBook.workKey),
+                        //Fetches the book description asynchronously
+                        future: fetchDescription(
+                          updatedBook.workKey,
+                        ), //Waits for fetchDescription to complete
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            ); //While waiting, show a loading spinner
                           } else if (snapshot.hasError) {
-                            return Text("Error loading description");
+                            return Text(
+                              "Error loading description",
+                            ); //Error message
                           } else {
                             return Text(
-                              snapshot.data ?? "No description available",
+                              snapshot.data ??
+                                  "No description available", //Returns the fetched description, or a default message if none is available
                             );
                           }
                         },
@@ -312,18 +347,24 @@ class BookPage extends StatelessWidget {
   }
 }
 
-// ------------------------------------------
-// Global funktion för beskrivning
+// Global function for description
 Future<String> fetchDescription(String workKey) async {
+  //Takes the workKey of a book as argument
   if (workKey.isEmpty) return "No description available";
-  final url = Uri.parse("https://openlibrary.org$workKey.json");
+  final url = Uri.parse(
+    "https://openlibrary.org$workKey.json",
+  ); //The URL to fetch the book data from Open Library API
   try {
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      //If the HTTP request was successful:
+      final data = jsonDecode(
+        response.body,
+      ); //"data" contains the decoded JSON response
       if (data['description'] is String) {
-        return data['description'];
+        return data['description']; //If description is a string, return it
       } else if (data['description']?['value'] != null) {
+        //If the description is an object with a 'value' field, return that
         return data['description']['value'];
       }
     }
@@ -332,5 +373,3 @@ Future<String> fetchDescription(String workKey) async {
   }
   return "No description available";
 }
-
-// ------------------------------------------
