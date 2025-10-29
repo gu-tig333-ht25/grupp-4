@@ -11,6 +11,7 @@ class Books {
   String? description; //ok to not have a description
 
   Books({
+    //constructor, funcion that runs when you create a new book object
     //lets you create an instance of books with no arguments
     this.id = "",
     this.title = "",
@@ -91,8 +92,8 @@ class Books {
 
     return Books(
       //take map of data (JSON from firebase or openlibrary), extract fields, create and return new Books object
-      id: json['id'] ?? '', //acces id key from JSON map, if null return empty
-      title: json['title'] ?? '',
+      id: json['id'] ?? '', //access id key from JSON map, if null return empty
+      title: json['title'] ?? 'Unknown title',
       author: json['author'] ?? 'Unknown author',
       year:
           parseInt(json['year']) ??

@@ -20,7 +20,7 @@ class UserProvider extends ChangeNotifier {
     loadUserData(); // When the userprovider is created, load the user data from firebase (with loadUserData function)
   }
 
-  // --- Add book to WantToRead ---
+  // Add book to WantToRead
   Future<void> addBookToWantToRead(Books book) async {
     final user =
         _auth.currentUser; // Get the current (authenticated) user from Firebase
@@ -49,7 +49,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // --- Add book to HaveRead ---
+  // Add book to HaveRead
   Future<void> addBookToHaveRead(Books book) async {
     final user = _auth.currentUser; // Get current user
     if (user == null) return;
@@ -74,7 +74,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // --- Load user data from Firebase ---
+  // Load user data from Firebase
   Future<void> loadUserData() async {
     final user = _auth.currentUser; // Get the current user via FirebaseAuth
     if (user == null) return; // If no user is logged in, exit

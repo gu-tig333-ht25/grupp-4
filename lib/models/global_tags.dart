@@ -25,4 +25,4 @@ List<String> listTropes = [
   'Kidnapping',
   'Revolution',
 ];
-List<String> listPopular = ['Friends to lovers', "Fantasy", "Dystopian"];
+List<String> listPopular = ['Enemies to lovers', "Fantasy", "Dystopian"];

@@ -79,7 +79,9 @@ class BookProvider extends ChangeNotifier {
     try {
       final dbRef = _db
           .child("books")
-          .child(book.id); //reference to the book's location in Firebase
+          .child(
+            book.id,
+          ); // trys to find reference to the book's location in Firebase
 
       final snapshot = await dbRef.get(); // get existing data for the book
       if (snapshot.exists) {
@@ -139,11 +141,12 @@ class BookProvider extends ChangeNotifier {
       ); // return Books object created from the retrieved data
     } catch (e) {
       // Catch any exceptions that occur during the Firebase operation
-      print("Error in getBookFromFirebase: $e"); // Print error message
+      print("Error in getBookFromFirebase: $e");
       return null; // Return null in case of error
     }
   }
 
+  // NOT ACTIVE!! To used in the future when users can add tags
   Future<void> updateBookGenreAndTropes(
     // Update a book's genre and tropes in Firebase
     String bookId,
@@ -170,44 +173,6 @@ class BookProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<Books>> loadAllBooksFromFirebase() async {
-    try {
-      // Fetch data from the path "/books/works" in Firebase
-      final snapshot = await _db.child("books/works").get();
-
-      // If the node doesn't exist or has no data, return an empty list
-      if (!snapshot.exists) return [];
-
-      // Convert the snapshot into a dart Map
-      final Map<String, dynamic> booksMap = Map<String, dynamic>.from(
-        snapshot.value as Map,
-      );
-
-      // Convert each entry (key/value pair) in the map into a Books object
-      final allBooks = booksMap.entries
-          .map(
-            (entry) => Books.fromJson(Map<String, dynamic>.from(entry.value)),
-          )
-          .toList();
-
-      // Return the list of Books objects
-      return allBooks;
-    } catch (e) {
-      print("Error in loadAllBooksFromFirebase: $e");
-      return [];
-    }
-  }
-
-  Books? getBookById(String id) {
-    // Get book from local list (_books) by its ID
-    try {
-      return _books.firstWhere((b) => b.id == id);
-    } catch (_) {
-      // If no book is found with the given ID return null
-      return null;
-    }
-  }
-
   Future<Books> getOrCreateBook(Books book) async {
     // GetOrCreateBook method
     final existing = await getBookFromFirebase(
@@ -221,8 +186,8 @@ class BookProvider extends ChangeNotifier {
   }
 
   Future<List<Books>> searchBooksByTags(Set<String> selectedTags) async {
-    if (selectedTags.isEmpty)
-      return []; //If no tags are selected, return an empty list
+    //If no tags are selected, return an empty list
+    if (selectedTags.isEmpty) return [];
 
     isLoading = true;
     notifyListeners();
@@ -265,10 +230,6 @@ class BookProvider extends ChangeNotifier {
         ..addAll(
           matchingBooks,
         ); //('..' is a consice way to clear and add all in one statement)
-
-      print(
-        "Found ${matchingBooks.length} books that matched all tags ${selectedTags.join(', ')}",
-      );
 
       isLoading =
           false; // Turn off loading state and update listeners to refresh the UI
