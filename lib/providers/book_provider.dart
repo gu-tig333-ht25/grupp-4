@@ -1,8 +1,8 @@
-import 'dart:convert'; // For jsonDecode
-import 'package:flutter/foundation.dart'; // For ChangeNotifier and kDebugMode
-import 'package:http/http.dart' as http; // For HTTP requests
-import 'package:firebase_database/firebase_database.dart'; // For Firebase Realtime Database
-import '../models/book_model.dart'; //books model
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
+import '../models/book_model.dart';
 
 class BookProvider extends ChangeNotifier {
   //Provider class for books, extends ChangeNotifier for state management
@@ -16,9 +16,9 @@ class BookProvider extends ChangeNotifier {
 
   Future<void> fetchBooks(String query) async {
     // Fetch books from Open Library API based on search query
-    if (query.isEmpty) return; //if query is empty, return
+    if (query.isEmpty) return;
 
-    isLoading = true; // Set loading state to true
+    isLoading = true;
     notifyListeners(); // Notify listeners about state change
 
     try {
@@ -127,10 +127,7 @@ class BookProvider extends ChangeNotifier {
           .get(); // Get the book data from Firebase
       if (!snapshot.exists) {
         // If the book does not exist in Firebase
-        print(
-          "No book found in Firebase for id: $bookId",
-        ); // Print message indicating no book found
-        return null; // Return null if book not found
+        return null;
       }
 
       final bookData = Map<String, dynamic>.from(
