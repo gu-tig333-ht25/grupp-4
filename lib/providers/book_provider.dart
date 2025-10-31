@@ -68,12 +68,6 @@ class BookProvider extends ChangeNotifier {
     notifyListeners(); // Notify listeners about state change
   }
 
-  void clearBooks() {
-    // Clear the books list
-    _books.clear();
-    notifyListeners(); // Notify listeners about state change
-  }
-
   Future<void> saveBookToFirebase(Books book) async {
     // Save or update a book in Firebase Realtime Database
     try {
