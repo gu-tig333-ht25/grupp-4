@@ -28,14 +28,18 @@ class BookPage extends StatelessWidget {
 
         final updatedBook = snapshot.data!;
 
+        //Added in order to save description to firebase
+        //Check if description is null or empty, in that case get it from openlibrary with fetchDescription
         if (updatedBook.description == null ||
             updatedBook.description!.isEmpty) {
           fetchDescription(updatedBook.workKey).then((
             fetchedDescription,
           ) async {
+            //if description is not empty and not the fallback value, save it to updatedBook (local Books instance)
             if (fetchedDescription.isNotEmpty &&
                 fetchedDescription != "No description available") {
               updatedBook.description = fetchedDescription;
+              //Save updated book (with description) to firebase)
               await context.read<BookProvider>().saveBookToFirebase(
                 updatedBook,
               );
