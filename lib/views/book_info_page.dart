@@ -28,6 +28,21 @@ class BookPage extends StatelessWidget {
 
         final updatedBook = snapshot.data!;
 
+        if (updatedBook.description == null ||
+            updatedBook.description!.isEmpty) {
+          fetchDescription(updatedBook.workKey).then((
+            fetchedDescription,
+          ) async {
+            if (fetchedDescription.isNotEmpty &&
+                fetchedDescription != "No description available") {
+              updatedBook.description = fetchedDescription;
+              await context.read<BookProvider>().saveBookToFirebase(
+                updatedBook,
+              );
+            }
+          });
+        }
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
